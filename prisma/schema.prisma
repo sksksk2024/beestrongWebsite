@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Order {
+  id String @id @default(cuid())
+  numeClient String
+  email String
+  telefon String
+  marimeTricou String?
+  marimePantaloni String?
+  codPostal String
+  iteme Json
+  total Float
+  status  String  @default("Nelivrat")
+  createdAt DateTime  @default(now())
+}
+
+// model Client {
+//   id        String   @id @default(cuid())
+//   clerkId    String?   @unique
+//   email     String   @unique
+//   nume      String
+//   codPostal String
+//   numarTelefon String
+//   haine  Haina[]
+//   mancare Mancare[]
+//   cart  Cart[]
+//   role     Role     @default(USER)
+//   messages Message[]
+//   createdAt DateTime @default(now())
+// }
+
+// model Haina {
+//   id  String  @id @default(cuid())
+//   nume  String
+//   cantitate  Int
+//   marime  String
+//   descriere String?
+//   idCumparator String
+//   cumparator Client @relation(fields: [idCumparator], references: [id])
+//   cartId     String
+//   cart       Cart     @relation(fields: [cartId], references: [id])
+// }
+
+// model Mancare {
+//   id  String  @id @default(cuid())
+//   nume  String
+//   cantitate Int
+//   descriere String?
+//   idCumparator  String
+//   cumparator  Client @relation(fields: [idCumparator], references: [id])
+//   cartId String
+//   cart  Cart  @relation(fields: [cartId], references: [id])
+// }
+
+// model Cart {
+//   id  String @id  @default(cuid())
+//   clientId  String
+//   client  Client  @relation(fields: [clientId], references: [id])
+//   haine Haina[]
+//   mancare Mancare[]
+//   createdAt DateTime  @default(now())
+//   status  String  @default("nelivrat")
+// }
+
+// model Message {
+//   id        String   @id @default(cuid())
+//   content   String
+//   userEmail String
+//   createdAt DateTime @default(now())
+//   read      Boolean  @default(false)
+//   clientId  String
+//   client    Client   @relation(fields: [clientId], references: [id])
+// }
+
+// enum Role {
+//   USER
+//   ADMIN
+// }
