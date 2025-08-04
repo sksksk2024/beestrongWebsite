@@ -11,15 +11,16 @@ type AlimentareType = {
   src1: string | StaticImageData;
   src2: string | StaticImageData;
   name: string;
+  disponibil?: number
   pret: number;
 };
 
-const Alimentare = ({ src1, src2, name, pret }: AlimentareType) => {
+const Alimentare = ({ src1, src2, name, pret, disponibil = 100 }: AlimentareType) => {
   const { modificaCantitate, stergeProdus, adaugaProdus } =
     useProductListStore();
   const productId = `aliment-${name.toLowerCase().replace(/\s+/g, '-')}`;
 
-  const [isHovered, setIsHovered] = useState<boolean>(true);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const produsInCos = useProductListStore((state) =>
     state.produse.find((p) => p.id === productId)
@@ -41,6 +42,7 @@ const Alimentare = ({ src1, src2, name, pret }: AlimentareType) => {
           nume: name,
           pret: pret,
           cantitate: 1,
+          disponibil: disponibil,
           imagine: getImageUrl(src1),
           tip: 'aliment',
         });
@@ -60,7 +62,7 @@ const Alimentare = ({ src1, src2, name, pret }: AlimentareType) => {
             onMouseLeave={() => setIsHovered(false)}
             className="relative flex items-center justify-center h-[9.375rem] cursor-pointer group mt-64M"
           >
-            <div className="text-xl absolute z-50 duration-300 group-hover:scale-125 right-0 bottom-[196px] font-bold bg-white rounded-tr-16BR rounded-bl-16BR border-2 border-black px-16P py-8P">
+            <div className="text-xl absolute z-50 duration-300 group-hover:scale-125 right-0 bottom-[196px] font-bold bg-gray-800 rounded-tr-16BR rounded-bl-16BR border-2 border-black px-16P py-8P">
               {pret}
             </div>
             <Image
@@ -83,7 +85,7 @@ const Alimentare = ({ src1, src2, name, pret }: AlimentareType) => {
             type="text"
             value={currentQuantity}
             readOnly
-            className="p-4P text-black bg-white font-bold text-2xl w-16 text-center border-2 border-black rounded-16BR"
+            className="p-4P text-yellow-400 bg-gray-800 font-bold text-2xl w-16 text-center border-2 border-black rounded-16BR"
             min="0" // Prevent negative numbers
           />
           <button

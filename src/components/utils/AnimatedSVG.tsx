@@ -40,7 +40,7 @@ const AnimatedSVG: React.FC<AnimatedSVGProps> = ({
         strokeWidth={strokeWidth}
         fill="currentColor"
         className={`${className} transition duration-0
-              fill-white group-hover:fill-warning
+              fill-yellow group-hover:fill-warning
           `}
         variants={svgVariants}
         initial="hidden"

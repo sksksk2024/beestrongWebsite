@@ -13,7 +13,7 @@ const XMenu = ({ className }: MenuProps) => {
       stroke="currentColor"
       fill="currentColor" // Added this to make the fill color consistent with the stroke color
       pathData="M4 4 L60 60 M4 60 L60 4"
-      className={`z-50 text-white group-hover:text-warning ${className}`}
+      className={`z-50 text-yellow-400 group-hover:text-warning ${className}`}
       label="close-menu"
       viewBox="0 0 64 64"
     />

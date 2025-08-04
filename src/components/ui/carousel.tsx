@@ -184,14 +184,14 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        'absolute size-10 rounded-full cursor-pointer transition-all duration-300 hover:opacity-90 -bottom-48I sm:top-1/2 sm:-left-16 sm:-translate-y-1/2',
+        'absolute size-10 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 -bottom-48I bg-gray-800 hover:bg-gray-800 sm:top-1/2 sm:-left-16 sm:-translate-y-1/2',
         className
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft className="text-black size-8" />
+      <ArrowLeft className="text-yellow-400 size-8" />
       <span className="sr-only">Previous slide</span>
     </Button>
   );
@@ -211,14 +211,14 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        'absolute size-10 rounded-full cursor-pointer transition-all duration-300 hover:opacity-90 -bottom-48I right-0 sm:top-1/2 sm:-right-16',
+        'absolute size-10 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 -bottom-48I bg-gray-800 hover:bg-gray-800 right-0 sm:top-1/2 sm:-right-16',
         className
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight className="text-black size-8" />
+      <ArrowRight className="text-yellow-400 size-8" />
       <span className="sr-only">Next slide</span>
     </Button>
   );

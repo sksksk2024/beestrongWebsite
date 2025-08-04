@@ -7,21 +7,27 @@ import Provenance from '@/../public/Provenance.svg';
 
 const Benefits = () => {
   return (
-    <Card className="w-[100%] m-auto flex flex-col md:flex-row justify-around items-center gap-10 font-bold rounded-none">
-      <div className="flex flex-col justify-center items-center text-center">
-        <Image src={Delivery} className="w-128W" alt="Livrare" />
+    <Card className="w-[100%] text-yellowCustom m-auto flex flex-col lg:flex-row justify-around items-center gap-10 font-bold  rounded-none px-2">
+      <div className="max-w-container-400 flex flex-col justify-center items-center gap-2 text-center bg-white rounded-16BR lg:w-1/3 border-t-4 border-x-2 border-black">
+        <Image src={Delivery} className="w-128W py-2" alt="Livrare" />
+        <div className="bg-black py-8P px-8P min-w-container-300 xs:min-w-container-400 lg:min-w-0 w-full rounded-b-16BR">
         <h4 className="text-xl">Livrare</h4>
         <p>Maxim 7 zile lucratoare</p>
+        </div>
       </div>
-      <div className="flex flex-col justify-center items-center text-center">
-        <Image src={Quality} className="w-128W" alt="Calitate" />
+      <div className="max-w-container-400 flex flex-col justify-center items-center gap-2 text-center bg-white rounded-16BR lg:w-1/3 border-t-4 border-x-2 border-black">
+        <Image src={Quality} className="w-128W py-2" alt="Calitate" />
+        <div className="bg-black py-8P px-8P min-w-container-300 xs:min-w-container-400 lg:min-w-0 w-full max-w-container-500 rounded-b-16BR">
         <h4 className="text-xl">Calitate</h4>
         <p>100% naturale</p>
+        </div>
       </div>
-      <div className="flex flex-col justify-center items-center text-center">
-        <Image src={Provenance} className="w-128W" alt="Provenienta" />
+      <div className="max-w-container-400 flex flex-col justify-center items-center gap-2 text-center bg-white rounded-16BR lg:w-1/3 border-t-4 border-x-2 border-black">
+        <Image src={Provenance} className="w-128W py-2" alt="Provenienta" />
+        <div className="bg-black py-8P px-8P max-w-container-300 xs:max-w-container-500 xs:min-w-container-400 lg:min-w-0 w-full rounded-b-16BR">
         <h4 className="text-xl">Provenienta</h4>
         <p>Miere 100% naturale, de la apicultori</p>
+        </div>
       </div>
     </Card>
   );

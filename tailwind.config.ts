@@ -140,7 +140,7 @@ module.exports = {
         'background-light': '#F5F7FA',
         highlight: '#E0F7F7',
         // highlight: '#F4D06F',
-        warning: '#FF8243',
+        warning: '#ffffffff',
         textis: '#000',
         'snow-gray': '#F1F3F2',
         // textis: '#505050',

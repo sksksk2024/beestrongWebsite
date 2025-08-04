@@ -29,97 +29,91 @@ const Page = () => {
   const [status, setStatus] = useState({ message: '', error: false });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const itemsInCart = produse.filter((produs) => produs.cantitate > 0)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+  setIsSubmitting(true);
 
-    try {
-      OrderSchema.parse(formData);
+  try {
+    const validation = OrderSchema.safeParse(formData);
+if (!validation.success) {
+  // Build a map of fieldErrors
+  const fieldErrs: Record<string,string> = {};
+  for (const issue of validation.error.issues) {
+    fieldErrs[issue.path[0] as string] = issue.message;
+  }
+  setFieldErrors(fieldErrs);
+  setStatus({ message: 'Completează toate câmpurile', error: true });
+  setIsSubmitting(false);
+  return;
+}
 
-      if (produse.length === 0) {
-        throw new Error('Adauga produse in cos mai intai!');
-      }
-
-      // Prepare order data
-      const order = {
-        ...formData,
-        iteme: produse,
-        total: totalGeneral,
-      };
-
-      // Send to API route
-      const res = await fetch('/api/comanda', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(order),
-      });
-
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
-
-      // Success
-      setFormData({
-        nume: '',
-        email: '',
-        telefon: '',
-        marimeTricou: '',
-        marimePantaloni: '',
-        codPostal: '',
-      });
-      golesteLista();
-      setStatus({ message: 'Comanda trimisa cu succes!', error: false });
-
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 2000);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        const newFieldError: Record<string, string> = {};
-        err.errors.forEach((error) => {
-          switch (error.path[0]) {
-            case 'nume':
-              newFieldError.nume =
-                'Numele trebuie sa contina minim 2 caractere';
-              break;
-            case 'email':
-              newFieldError.nume = 'Introdu o adresa de email valida';
-              break;
-            case 'telefon':
-              newFieldError.nume = 'Introdu un numar de telefon valid';
-              break;
-            case 'codPostal':
-              newFieldError.nume = 'Introdu un cod postal valid';
-              break;
-          }
-        });
-        setFieldErrors(newFieldError);
-        setStatus({
-          message: 'Te rugam sa completezi corect toate campurile',
-          error: true,
-        });
-      } else {
-        setStatus({
-          message: err instanceof Error ? err.message : 'Eroare necunoscuta',
-          error: true,
-        });
-      }
-    } finally {
-      setIsSubmitting(false);
+    if (produse.length === 0) {
+      throw new Error('Adauga produse in cos mai intai!');
     }
+
+    const order = {
+      ...formData,
+      iteme: produse.map(p => ({
+        productId: p.id,
+        nume: p.nume,
+        cantitate: p.cantitate,
+        pret: p.pret,
+        imagine:   p.imagine
+      })),
+      total: totalGeneral
+    };
+
+    const res = await fetch('/api/comanda', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order),
+    });
+
+    const responseData = await res.json();
+    
+    if (!res.ok) {
+      if (responseData.invalidProducts) {
+        const errorDetails = responseData.invalidProducts
+          .map((p: any) => `• ${p.nume || p.productId}: ${p.error}`)
+          .join('\n');
+        throw new Error(`Probleme cu produsele:\n${errorDetails}`);
+      }
+      throw new Error(responseData.error || 'Eroare la trimiterea comenzii');
+    }
+
+    // Success handling...
+    setStatus({ message: 'Comanda trimisa cu succes!', error: false });
+    golesteLista();
+    
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 2000);
+  } catch (err) {
+    console.error('Order submission error:', err);
+    setStatus({
+      message: err instanceof Error ? err.message : 'Eroare necunoscuta',
+      error: true
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
   };
 
   return (
     <PageWrapper>
-      <div className="h-auto flex flex-col justify-center items-center gap-20 bg-black text-white py-48P w-full lg:flex-row lg:gap-0 lg:py-0 lg:h-[100dvh]">
+      <div className="h-auto flex flex-col justify-center items-center gap-20 bg-black text-yellow-400 py-48P w-full lg:flex-row lg:gap-0 lg:py-0 lg:h-[100dvh]">
         <h1 className="hidden">Pagina de comanda</h1>
         <section className="flex flex-col justify-center items-start gap-2 mx-auto px-32P">
           <h2 className="text-center text-lg sm:text-2xl lg:text-3xl font-bold mb-16M mx-auto lg:mx-0 lg:text-start">
             Ce comanzi
           </h2>
+          {itemsInCart.length === 0 ? 'Cosul este gol' : (
           <ul>
             {produse.map((produs, index) => {
               const pretTotal = produs.cantitate * produs.pret;
+              if (produs.cantitate <= 0) return
               return (
                 <React.Fragment key={index}>
                   <li className="underline">
@@ -158,9 +152,10 @@ const Page = () => {
               </div>
             </li>
           </ul>
+          )}
         </section>
         <form
-          className={`text-white flex flex-col justify-center items-center gap-2 mx-auto
+          className={`text-yellow-400 flex flex-col justify-center items-center gap-2 mx-auto
             
             `}
         >
@@ -168,14 +163,14 @@ const Page = () => {
             Trimite mesaj echipei!
           </h2>
           <input
-            className="p-2 rounded bg-gray-800 min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
+            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="text"
             placeholder="Nume"
             value={formData.nume}
             onChange={(e) => setFormData({ ...formData, nume: e.target.value })}
           />
           <input
-            className="p-2 rounded bg-gray-800 min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
+            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="email"
             placeholder="Email"
             value={formData.email}
@@ -184,7 +179,7 @@ const Page = () => {
             }
           />
           <input
-            className="p-2 rounded bg-gray-800 min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
+            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="text"
             placeholder="Marimea ta la tricou"
             value={formData.marimeTricou}
@@ -193,7 +188,7 @@ const Page = () => {
             }
           />
           <input
-            className="p-2 rounded bg-gray-800 min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
+            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="text"
             placeholder="Marimea ta la pantaloni"
             value={formData.marimePantaloni}
@@ -202,7 +197,7 @@ const Page = () => {
             }
           />
           <input
-            className="p-2 rounded bg-gray-800 min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
+            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="text"
             placeholder="Numar de telefon"
             value={formData.telefon}
@@ -211,7 +206,7 @@ const Page = () => {
             }
           />
           <input
-            className="p-2 rounded bg-gray-800 min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
+            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="text"
             placeholder="Cod postal"
             value={formData.codPostal}
@@ -225,7 +220,7 @@ const Page = () => {
             onClick={handleSubmit}
             disabled={isSubmitting}
             className={`text-lg font-bold min-w-container-300 w-full max-w-container-600 mt-16M py-16P cursor-pointer
-              ${isSubmitting ? 'bg-gray-500' : 'bg-blue-600'}
+              ${isSubmitting ? 'border border-white' : 'border border-white'}
               `}
             variants={buttonVariants}
             initial="initial"
@@ -237,9 +232,16 @@ const Page = () => {
           {fieldErrors.nume && (
             <p className={`text-sm mt-8M text-red-500`}>{fieldErrors.nume}</p>
           )}
-          {status.message === 'Comanda trimisa!' && (
-            <p className="text-sm mt-8M text-green-500">Comanda trimisa!</p>
-          )}
+          {status.message && (
+  <p
+    className={`text-sm mt-8M ${
+      status.error ? 'text-red-500' : 'text-green-500'
+    }`}
+  >
+    {status.message}
+  </p>
+)}
+
         </form>
       </div>
     </PageWrapper>

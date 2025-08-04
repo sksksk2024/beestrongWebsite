@@ -53,8 +53,8 @@ const Footer = () => {
       </Link>
 
       <div className="w-full flex flex-col md:flex-row md:justify-start items-center gap-5 md:gap-10 mb-32M">
-        <Image className="w-256W" src={anpc} alt="ANPC" />
-        <Image className="w-256W" src={anaf} alt="ANAF" />
+        <Image className="w-128W" src={anpc} alt="ANPC" />
+        <Image className="w-128W" src={anaf} alt="ANAF" />
       </div>
     </footer>
   );

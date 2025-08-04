@@ -15,6 +15,19 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Product {
+  id  String  @id @default(cuid())
+  nume  String
+  pret  Float
+  stoc  Int @default(0)
+  imagine String?
+  categorie String 
+  descriere String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comenzi Order[]
+}
+
 model Order {
   id String @id @default(cuid())
   numeClient String
@@ -27,6 +40,7 @@ model Order {
   total Float
   status  String  @default("Nelivrat")
   createdAt DateTime  @default(now())
+  produse Product[]
 }
 
 // model Client {

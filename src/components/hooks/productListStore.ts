@@ -9,6 +9,7 @@ export type Produs = {
   nume: string;
   pret: number;
   cantitate: number;
+  disponibil: number;
   imagine: string;
   tip: TipProdus;
 };
@@ -21,6 +22,8 @@ interface StareLista {
   golesteLista: () => void;
   produseFiltrate: (tip: TipProdus) => Produs[]; // New utility function
   modificaCantitate: (id: string, modificare: number) => void;
+  // Admin Only
+  actualizeazaStoc: (id: string, stocNou: number) => void
 }
 
 export const useProductListStore = create<StareLista>()(
@@ -31,11 +34,15 @@ export const useProductListStore = create<StareLista>()(
         set((state) => {
           const existent = state.produse.find((p) => p.id === produs.id);
           if (existent) {
+            // Prevent adding more than available
+            const cantitateNoua = Math.min(
+              existent.cantitate + produs.cantitate,
+              existent.disponibil
+            )
             return {
               produse: state.produse.map((p) =>
                 p.id === produs.id
-                  ? { ...p, cantitate: p.cantitate + produs.cantitate }
-                  : p
+                  ? { ...p, cantitate: cantitateNoua } : p
               ),
             };
           }
@@ -45,7 +52,7 @@ export const useProductListStore = create<StareLista>()(
         set((state) => ({
           produse: state.produse.map((produs) =>
             produs.id === id
-              ? { ...produs, cantitate: Math.max(0, cantitateNoua) }
+              ? { ...produs, cantitate: Math.min(Math.max(0, cantitateNoua), produs.disponibil) }
               : produs
           ),
         })),
@@ -61,9 +68,22 @@ export const useProductListStore = create<StareLista>()(
             produs.id === id
               ? {
                   ...produs,
-                  cantitate: Math.max(0, produs.cantitate + modificare),
+                  cantitate: Math.min(Math.max(0, produs.cantitate + modificare), produs.disponibil),
                 }
               : produs
+          ),
+        })),
+      actualizeazaStoc: (id, stocNou) => 
+        set((state) => ({
+          produse: state.produse.map((produs) => 
+          produs.id === id
+          ? {
+            ...produs,
+            disponibil: stocNou,
+            // Ensure cart quantity doesn't exceed new stock
+            cantitate: Math.min(produs.cantitate, stocNou)
+          } :
+          produs
           ),
         })),
     }),

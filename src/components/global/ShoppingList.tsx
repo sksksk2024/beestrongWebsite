@@ -12,6 +12,8 @@ const ShoppingList = () => {
 
   const [down, setDown] = useState<boolean>(false);
 
+  const itemsInCart = produse.filter((produs) => produs.cantitate > 0);
+
   const totalGeneral = produse.reduce(
     (total, produs) => total + produs.cantitate * produs.pret,
     0
@@ -25,19 +27,20 @@ const ShoppingList = () => {
 
   return (
     <section
-      className={`fixed bottom-0 text-xl text-white w-full z-40 text-center mx-auto ${listClass}`}
+      className={`fixed bottom-0 text-xl text-yellow-400 w-full z-40 text-center mx-auto ${listClass}`}
     >
       <div className="bg-black p-32P pt-64P w-full max-w-container-600 mx-auto rounded-t-16BR">
         <motion.div onClick={toggleList} className="relative bottom-32I">
           <Minus className="absolute right-0" />
         </motion.div>
-        <h3 className="underline mb-32M text-2xl">Shopping List</h3>
-        {produse.length === 0 ? (
-          <p className="text-white text-center py-8">Cosul este gol</p>
+        <h3 className="underline mb-32M text-2xl">Cumparaturile tale</h3>
+        {itemsInCart.length === 0 ? (
+          <p className="text-yellow-400 text-center py-8">Cosul este gol</p>
         ) : (
           <ul>
             {produse.map((produs) => {
               const pretTotal = produs.cantitate * produs.pret;
+              if (produs.cantitate === 0) return
               return (
                 <React.Fragment key={produs.id}>
                   <li className="underline">

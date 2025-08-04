@@ -59,28 +59,122 @@ export async function POST(req: Request) {
       );
     }
 
+    // Verify all products exist and have sufficient stock
+const productIds = orderData.iteme.map((i:any) => i.productId);
+const products = await prisma.product.findMany({
+  where: { id: { in: productIds } },
+  select: { id: true, stoc: true, nume: true },
+});
+
+// then build a map for quick lookup:
+const productsMap = Object.fromEntries(products.map(p => [p.id, p]));
+
+const invalidProducts = orderData.iteme.map((item: any) => {
+  const prod = productsMap[item.productId];
+  if (!prod) {
+    return { valid: false, productId: item.productId, error: 'Produsul nu există' };
+  }
+  if (prod.stoc < item.cantitate) {
+    return { valid: false, productId: item.productId, productName: prod.nume, available: prod.stoc, requested: item.cantitate, error: 'Stoc insuficient' };
+  }
+  return { valid: true, productId: item.productId };
+}).filter((v: any) => !v.valid);
+
+if (invalidProducts.length) {
+  return NextResponse.json(
+    { error: 'Produse invalide', invalidProducts },
+    { status: 400 }
+  );
+}
+
+    // Create transaction to update stock and create order
+   const result = await prisma.$transaction(async (tx) => {
+  // Get all products at once
+  const products = await tx.product.findMany({
+    where: {
+      id: { in: orderData.iteme.map((i: any) => i.productId) }
+    },
+    select: { id: true, stoc: true, nume: true }
+  });
+
+  // Verify all products were found
+  if (products.length !== orderData.iteme.length) {
+    const missingIds = orderData.iteme
+      .filter((i: any) => !products.some(p => p.id === i.productId))
+      .map((i: any) => i.productId);
+    throw new Error(`Produse lipsă: ${missingIds.join(', ')}`);
+  }
+
+  // Verify stock
+  const outOfStock = products.filter(p => {
+    const item = orderData.iteme.find((i: any) => i.productId === p.id);
+    return p.stoc < item!.cantitate;
+  });
+
+  if (outOfStock.length > 0) {
+    throw new Error(
+      `Stoc epuizat pentru: ${outOfStock.map(p => p.nume).join(', ')}`
+    );
+  }
+
+  // Update stocks
+  await Promise.all(
+    orderData.iteme.map((item: any) =>
+      tx.product.update({
+        where: { id: item.productId },
+        data: { stoc: { decrement: item.cantitate } }
+      })
+    )
+  );
+
+  // Create order
+  return await tx.order.create({
+    data: {
+      numeClient: orderData.nume,
+      email: orderData.email,
+      telefon: orderData.telefon,
+      marimeTricou: orderData.marimeTricou || 'N/A',
+      marimePantaloni: orderData.marimePantaloni || 'N/A',
+      codPostal: orderData.codPostal,
+      iteme: orderData.iteme,
+      total: orderData.total,
+      status: 'Nelivrat',
+      produse: {
+        connect: orderData.iteme.map((item: any) => ({
+          id: item.productId
+        }))
+      }
+    }
+  });
+});
+
     // Save to DB
-    const order = await prisma.order.create({
-      data: {
-        numeClient: orderData.nume,
-        email: orderData.email,
-        telefon: orderData.telefon,
-        marimeTricou: orderData.marimeTricou || 'N/A',
-        marimePantaloni: orderData.marimePantaloni || 'N/A',
-        codPostal: orderData.codPostal,
-        iteme: orderData.iteme,
-        total: orderData.total,
-        status: 'Nelivrat',
-      },
-    });
+    // const order = await prisma.order.create({
+    //   data: {
+    //     numeClient: orderData.nume,
+    //     email: orderData.email,
+    //     telefon: orderData.telefon,
+    //     marimeTricou: orderData.marimeTricou || 'N/A',
+    //     marimePantaloni: orderData.marimePantaloni || 'N/A',
+    //     codPostal: orderData.codPostal,
+    //     iteme: orderData.iteme,
+    //     total: orderData.total,
+    //     status: 'Nelivrat',
+    //   },
+    // });
     // Format products for email
+
+    if (!process.env.SENDGRID_API_KEY) {
+  return NextResponse.json({ error: 'Missing SENDGRID_API_KEY' }, { status: 500 });
+}
+
     const productsHtml = orderData.iteme
       .map(
         (product: any) => `
         <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
           <h3 style="margin: 0; color: #333;">${product.nume}</h3>
           <p style="margin: 5px 0; color: #666;">
-            Quantity: ${product.cantitate} × ${product.pret} RON = ${product.cantitate * product.pret} RON
+            Cantitate: ${product.cantitate} × ${product.pret} RON = ${product.cantitate * product.pret} RON
           </p>
         </div>
       `
@@ -107,7 +201,7 @@ export async function POST(req: Request) {
             <p><strong>Marime Pantaloni:</strong> ${orderData.marimePantaloni || 'N/A'}</p>
           </div>
           
-          <h3 style="margin-bottom: 5px;">Order Items</h3>
+          <h3 style="margin-bottom: 5px;">Produsele Comandate</h3>
           ${productsHtml}
           
           <div style="margin-top: 20px; font-size: 1.2em;">
@@ -115,8 +209,8 @@ export async function POST(req: Request) {
           </div>
           
           <p style="margin-top: 30px; font-size: 0.9em; color: #718096;">
-            Order ID: ${order.id}<br>
-            Received at: ${new Date().toLocaleString()}
+            ID comanda: ${result.id}<br>
+            Comandata in: ${new Date().toLocaleString()}
           </p>
         </div>
       `,
@@ -142,11 +236,11 @@ export async function POST(req: Request) {
             </div>
           </div>
           
-          <h3>Delivery Information</h3>
+          <h3>Informatii Curierat</h3>
           <p>In maximum 7 zile lucratoare iti aducem comanda. Iti trimitem mai multe detalii daca este cazul.</p>
           
           <p style="margin-top: 30px; font-size: 0.9em; color: #718096;">
-            ID Comanda: ${order.id}<br>
+            ID comanda: ${result.id}<br>
             Comandata in: ${new Date().toLocaleString()}
           </p>
           
@@ -157,7 +251,7 @@ export async function POST(req: Request) {
       `,
     });
 
-    return NextResponse.json({ success: true, orderId: order.id });
+    return NextResponse.json({ success: true, orderId: result });
   } catch (error) {
     console.error('Trimitere esuata:', error);
     return NextResponse.json({ error: 'Eroare la procesare' }, { status: 500 });

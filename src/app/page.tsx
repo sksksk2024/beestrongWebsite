@@ -11,6 +11,8 @@ import Footer from '@/components/global/Footer';
 import Benefits from '@/components/global/Benefits';
 import Food1 from '@/../public/alimentare.jpg';
 import Food2 from '@/../public/alimentare2.jpg';
+import Tricou1 from '@/../public/Tricou1.jpg';
+import Tricou2 from '@/../public/Tricou2.jpg';
 import ShoppingList from '@/components/global/ShoppingList';
 import Link from 'next/link';
 import XMenu from '@/components/utils/XMenu';
@@ -103,7 +105,7 @@ export default function Home() {
 
         {/* Sliding Menu */}
         <div
-          className={`max-w-container-300 text-white bg-black fixed top-0 left-0 h-full xs:w-1/4 z-50 transform transition-transform duration-300 ${
+          className={`max-w-container-300 text-yellow-400 bg-black fixed top-0 left-0 h-full xs:w-1/4 z-50 transform transition-transform duration-300 ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
@@ -140,17 +142,6 @@ export default function Home() {
                   </Link>
                 </motion.li>
               )}
-              <motion.li
-                variants={buttonVariants}
-                initial="hidden"
-                animate="end"
-                whileHover="hover"
-                className=""
-              >
-                <Link className="cursor-pointer" href="/">
-                  Stoc
-                </Link>
-              </motion.li>
 
               {/* Sign In/Sign Out based on auth state */}
               {user ? (
@@ -184,7 +175,7 @@ export default function Home() {
 
         {/* Main Content */}
         <section
-          className={`text-white bg-black flex flex-col gap-[5rem] transition-all duration-300 ${
+          className={`text-yellow-400 bg-black flex flex-col gap-[5rem] transition-all duration-300 ${
             isMenuOpen ? 'blur-sm' : ''
           }`}
         >
@@ -215,7 +206,7 @@ export default function Home() {
                 Browser-ul tău nu suportă tag-ul video.
               </video>
             </div>
-            <h2 className="relative bottom-52I sm:bottom-64I lg:bottom-75I z-40 text-white font-bold bg-black p-16P text-center text-sm sm:text-lg lg:text-2xl">
+            <h2 className="relative bottom-52I sm:bottom-64I lg:bottom-75I z-40 text-yellow-400 font-bold bg-black p-16P text-center text-sm sm:text-lg lg:text-2xl">
               FORTA DIVINA, DIRECT DE LA ALBINA
             </h2>
           </div>
@@ -242,7 +233,7 @@ export default function Home() {
                 src={hoveredFood ? Food2 : Food1}
                 alt="img"
               />
-              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellow-500 px-[0.5rem]">
+              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellow-400 px-[0.5rem]">
                 Art Alimentare
               </h3>
             </Card>
@@ -255,10 +246,10 @@ export default function Home() {
             >
               <Image
                 className="absolute inset-0 object-cover aspect-2/2 xs:aspect-2/2 rounded-16BR transition-transform duration-300 group-hover:scale-105"
-                src={hoveredClothes ? Food2 : Food1}
+                src={hoveredClothes ? Tricou2 : Tricou1}
                 alt="img"
               />
-              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellow-500 px-[0.5rem]">
+              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellow-400 px-[0.5rem]">
                 Art Vestimentare
               </h3>
             </Card>
@@ -268,7 +259,7 @@ export default function Home() {
           <div className="w-full max-w-container-1000 mx-auto mb-[5rem] xs:mb-[15rem] sm:mb-[25rem]">
             <Card className="flex items-center text-5xl font-bold bg-black">
               <div className="bg absolute z-0 inset-0 w-full aspect-2/1 object-cover rounded-16BR bg-black" />
-              <h2 className="relative top-96I sm:top-176I z-10 bg-black p-16P text-white text-sm sm:text-lg lg:text-2xl">
+              <h2 className="relative top-96I sm:top-176I z-10 bg-black p-16P text-yellow-400 text-sm sm:text-lg lg:text-2xl">
                 COMUNITATE
               </h2>
             </Card>
