@@ -55,7 +55,7 @@ interface Order {
 
 const AdminPanel = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [down, setDown] = useState<boolean>(false);

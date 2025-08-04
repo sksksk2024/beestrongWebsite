@@ -203,5 +203,6 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
     );
   }
 );
+ProductCarousel.displayName = 'ProductCarousel';
 
 export default ProductCarousel;

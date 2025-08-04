@@ -9,6 +9,12 @@ import PageWrapper from '@/components/contexts/PageWrapper';
 import Image from 'next/image';
 import { useProductListStore } from '@/components/hooks/productListStore';
 
+type InvalidProduct = {
+  nume?: string;
+  productId: string;
+  error: string;
+};
+
 const Page = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { produse, golesteLista } = useProductListStore();
@@ -75,7 +81,7 @@ if (!validation.success) {
     if (!res.ok) {
       if (responseData.invalidProducts) {
         const errorDetails = responseData.invalidProducts
-          .map((p: any) => `• ${p.nume || p.productId}: ${p.error}`)
+          .map((p: InvalidProduct) => `• ${p.nume || p.productId}: ${p.error}`)
           .join('\n');
         throw new Error(`Probleme cu produsele:\n${errorDetails}`);
       }

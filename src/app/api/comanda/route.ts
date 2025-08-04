@@ -6,6 +6,22 @@ import { prisma } from '@/lib/prisma';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
+type OrderItem = {
+  productId: string;
+  cantitate: number;
+  pret: number;
+  nume: string;
+  imagine: string;
+};
+
+type Iteme = {
+  productId: string;
+  nume: string;
+  cantitate: number;
+  pret: number;
+  imagine: string;
+};
+
 // UPDATE STATUS OF AN ORDER
 export async function PATCH(req: Request) {
   try {
@@ -69,7 +85,7 @@ const products = await prisma.product.findMany({
 // then build a map for quick lookup:
 const productsMap = Object.fromEntries(products.map(p => [p.id, p]));
 
-const invalidProducts = orderData.iteme.map((item: any) => {
+const invalidProducts = orderData.iteme.map((item: OrderItem) => {
   const prod = productsMap[item.productId];
   if (!prod) {
     return { valid: false, productId: item.productId, error: 'Produsul nu există' };
@@ -119,7 +135,7 @@ if (invalidProducts.length) {
 
   // Update stocks
   await Promise.all(
-    orderData.iteme.map((item: any) =>
+    orderData.iteme.map((item: Iteme) =>
       tx.product.update({
         where: { id: item.productId },
         data: { stoc: { decrement: item.cantitate } }
