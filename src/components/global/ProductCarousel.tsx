@@ -1,5 +1,4 @@
 'use client';
-// @typescript-eslint/no-explicit-any
 
 import React, { forwardRef } from 'react';
 import {

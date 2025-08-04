@@ -1,4 +1,5 @@
 'use client';
+// @typescript-eslint/no-explicit-any
 
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
@@ -247,7 +248,6 @@ const AdminPanel = () => {
                 {selectedOrder.numeClient}
               </h3>
               <ul>
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 {selectedOrder.iteme.map((item: any, index: number) => {
                   const pretTotal = item.cantitate * item.pret;
                   return (
