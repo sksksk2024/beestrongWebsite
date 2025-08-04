@@ -10,8 +10,9 @@ import {
 import XMenu from '../utils/XMenu';
 import Vestimentare from './Vestimentare';
 import Alimentare from './Alimentare';
-import Food1 from '@/../public/alimentare.jpg';
-import Food2 from '@/../public/alimentare2.jpg';
+import Food1 from '@/../public/alimentara1.png';
+import Food2 from '@/../public/alimentara2.jpg';
+import Food3 from '@/../public/alimentara3.jpg';
 import Tricou1 from '@/../public/tigru1.jpg';
 import Tricou11 from '@/../public/tigru2.jpg';
 import Tricou2 from '@/../public/rocket1.jpg';
@@ -134,6 +135,33 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
     },
 ]
 
+const produseAlimentare = [
+    {
+        id: 'cmdx59mo300009g1kx3trfci9',
+        src1: Food1,
+        src2: Food1,
+        nume: 'Jersey Zebra',
+        pret: 150,
+        stoc: 10
+    },
+    {
+        id: 'cmdx59mo400019g1kkd17uqga',
+        src1: Food2,
+        src2: Food2,
+        nume: 'Jersey Galaxy',
+        pret: 150,
+        stoc: 10
+    },
+    {
+        id: 'cmdx59mo400029g1kv8zfhs5h',
+        src1: Food3,
+        src2: Food3,
+        nume: 'Shorts Negri',
+        pret: 150,
+        stoc: 10
+    },
+]
+
     return (
       <section
         ref={ref}
@@ -168,19 +196,16 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
           </button>
           {isAlimenteModal && (
             <CarouselContent className="w-[31.25rem] h-[18.75rem]">
-                  <Alimentare
-                    src1={Food1}
-                    src2={Food2}
-                    name="Miere de mana"
-                    // disponibil
-                    pret={40}
-                  />
-                  <Alimentare
-                    src1={Food2}
-                    src2={Food1}
-                    name="Miere de tei"
-                    pret={30}
-                  />
+              {produseVestimentare.map((produs) => (
+                <Alimentare
+                  key={produs.id}
+              src1={produs.src1}
+              src2={produs.src2}
+              nume={produs.nume}
+              pret={produs.pret}
+              // idProdus={produs.id}
+                />
+              ))}
             </CarouselContent>
           )}
           {isVestimentareModal && (

@@ -75,6 +75,27 @@ async function main() {
       categorie: 'vestimentar',
       imagine: '/albRocket2.jpg',
     },
+    {
+      nume: 'Compression T-shirt alb',
+      pret: 150,
+      stoc: 10,
+      categorie: 'alimentara',
+      imagine: '/alimentara1.jpg',
+    },
+    {
+      nume: 'Compression T-shirt alb',
+      pret: 150,
+      stoc: 10,
+      categorie: 'alimentara',
+      imagine: '/alimentara2.jpg',
+    },
+    {
+      nume: 'Compression T-shirt alb',
+      pret: 150,
+      stoc: 10,
+      categorie: 'alimentara',
+      imagine: '/alimentara3.jpg',
+    },
     ],
     skipDuplicates: true,
   })  

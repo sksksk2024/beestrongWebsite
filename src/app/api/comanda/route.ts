@@ -2,17 +2,10 @@
 
 import { NextResponse } from 'next/server';
 import sgMail from '@sendgrid/mail';
+import { Order, OrderItem, InvalidProduct, Product } from "@/components/utils/types";
 import { prisma } from '@/lib/prisma';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
-
-type OrderItem = {
-  productId: string;
-  cantitate: number;
-  pret: number;
-  nume: string;
-  imagine: string;
-};
 
 type Iteme = {
   productId: string;

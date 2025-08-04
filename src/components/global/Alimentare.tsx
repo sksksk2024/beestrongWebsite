@@ -10,15 +10,15 @@ import { getImageUrl } from '../utils/imageHelpers';
 type AlimentareType = {
   src1: string | StaticImageData;
   src2: string | StaticImageData;
-  name: string;
+  nume: string;
   disponibil?: number
   pret: number;
 };
 
-const Alimentare = ({ src1, src2, name, pret, disponibil = 100 }: AlimentareType) => {
+const Alimentare = ({ src1, src2, nume, pret, disponibil = 100 }: AlimentareType) => {
   const { modificaCantitate, stergeProdus, adaugaProdus } =
     useProductListStore();
-  const productId = `aliment-${name.toLowerCase().replace(/\s+/g, '-')}`;
+  const productId = `aliment-${nume.toLowerCase().replace(/\s+/g, '-')}`;
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
@@ -39,7 +39,7 @@ const Alimentare = ({ src1, src2, name, pret, disponibil = 100 }: AlimentareType
         // If product doesn't exist, add it with quantity 1
         adaugaProdus({
           id: productId,
-          nume: name,
+          nume: nume,
           pret: pret,
           cantitate: 1,
           disponibil: disponibil,
@@ -54,7 +54,7 @@ const Alimentare = ({ src1, src2, name, pret, disponibil = 100 }: AlimentareType
   };
 
   return (
-    <CarouselItem id={name} className="basis-[66%] max-w-[66%] px-2">
+    <CarouselItem id={nume} className="basis-[66%] max-w-[66%] px-2">
       <div className="p-[0.5625rem]">
         <Card>
           <CardContent
@@ -70,7 +70,7 @@ const Alimentare = ({ src1, src2, name, pret, disponibil = 100 }: AlimentareType
               src={isHovered ? src2 : src1}
               width={300}
               height={300}
-              alt={name}
+              alt={nume}
             />
           </CardContent>
         </Card>
