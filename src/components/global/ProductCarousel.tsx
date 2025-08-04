@@ -10,9 +10,9 @@ import {
 import XMenu from '../utils/XMenu';
 import Vestimentare from './Vestimentare';
 import Alimentare from './Alimentare';
-import Food1 from '@/../public/alimentara1.png';
-import Food2 from '@/../public/alimentara2.png';
-import Food3 from '@/../public/alimentara3.png';
+// import Food1 from '@/../public/alimentara1.png';
+// import Food2 from '@/../public/alimentara2.png';
+// import Food3 from '@/../public/alimentara3.png';
 import Tricou1 from '@/../public/tigru1.jpg';
 import Tricou11 from '@/../public/tigru2.jpg';
 import Tricou2 from '@/../public/rocket1.jpg';
