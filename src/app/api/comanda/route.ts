@@ -1,8 +1,9 @@
 // src/app/api/comanda/route.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { NextResponse } from 'next/server';
 import sgMail from '@sendgrid/mail';
-import { Order, OrderItem, InvalidProduct, Product } from "@/components/utils/types";
+import { OrderItem } from "@/components/utils/types";
 import { prisma } from '@/lib/prisma';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);

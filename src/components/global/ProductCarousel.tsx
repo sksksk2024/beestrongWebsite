@@ -135,32 +135,32 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
     },
 ]
 
-const produseAlimentare = [
-    {
-        id: 'cmdx59mo300009g1kx3trfci9',
-        src1: Food1,
-        src2: Food1,
-        nume: 'Jersey Zebra',
-        pret: 150,
-        stoc: 10
-    },
-    {
-        id: 'cmdx59mo400019g1kkd17uqga',
-        src1: Food2,
-        src2: Food2,
-        nume: 'Jersey Galaxy',
-        pret: 150,
-        stoc: 10
-    },
-    {
-        id: 'cmdx59mo400029g1kv8zfhs5h',
-        src1: Food3,
-        src2: Food3,
-        nume: 'Shorts Negri',
-        pret: 150,
-        stoc: 10
-    },
-]
+// const produseAlimentare = [
+//     {
+//         id: 'cmdx59mo300009g1kx3trfci9',
+//         src1: Food1,
+//         src2: Food1,
+//         nume: 'Jersey Zebra',
+//         pret: 150,
+//         stoc: 10
+//     },
+//     {
+//         id: 'cmdx59mo400019g1kkd17uqga',
+//         src1: Food2,
+//         src2: Food2,
+//         nume: 'Jersey Galaxy',
+//         pret: 150,
+//         stoc: 10
+//     },
+//     {
+//         id: 'cmdx59mo400029g1kv8zfhs5h',
+//         src1: Food3,
+//         src2: Food3,
+//         nume: 'Shorts Negri',
+//         pret: 150,
+//         stoc: 10
+//     },
+// ]
 
     return (
       <section

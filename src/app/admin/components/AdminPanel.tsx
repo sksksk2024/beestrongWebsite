@@ -248,6 +248,7 @@ const AdminPanel = () => {
               </h3>
               <ul>
                 {selectedOrder.iteme.map((item: any, index: number) => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const pretTotal = item.cantitate * item.pret;
                   return (
                     <React.Fragment key={index}>
