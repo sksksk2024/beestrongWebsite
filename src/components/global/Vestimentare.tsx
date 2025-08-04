@@ -23,8 +23,8 @@ const Tricou = ({ src1, src2, nume, pret,
   const [availableStock, setAvailableStock] = useState(0);
   const [stoc, setStoc] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setLoading] = useState(true);
+  const [, setError] = useState<string | null>(null);
 
   const { stergeProdus, modificaCantitate, adaugaProdus, produse } = useProductListStore();
   
@@ -92,9 +92,6 @@ const Tricou = ({ src1, src2, nume, pret,
     }
   };
 
-  // if (loading) {return (<div>Loading...</div>)}
-  // if (error) {return (<div>Error: {error}</div>)}
-
   return (
     <CarouselItem id={nume} className="basis-[66%] max-w-[66%] px-2">
       <div className="p-[0.5625rem]">
@@ -141,7 +138,7 @@ const Tricou = ({ src1, src2, nume, pret,
             type="text"
             value={currentQuantity}
             readOnly
-            className="p-4P text-yellow-400 bg-gray-800 font-bold text-2xl w-16 text-center border-2 border-black rounded-16BR"
+            className="p-4P text-yellowCustom bg-gray-800 font-bold text-2xl w-16 text-center border-2 border-black rounded-16BR"
             min="0" // Prevent negative numbers
           />
           <button

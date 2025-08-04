@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { pulsesVariants, svgVariants } from '../motionVariants/motionVariants';
 import BurgerMenu from '../utils/BurgerMenu';
@@ -39,14 +38,14 @@ const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
         <BurgerMenu className="w-32W sm:w-48W h-48H sm:h-64H" />
       </motion.button>
 
-      <h1 className="absolute w-[100dvw] left-0 z-30 text-yellow-400 font-bold bg-black p-8P pl-0 -mt-8M sm:mt-0 sm:p-16P sm:pl-0 text-center text-lg sm:text-2xl lg:text-3xl">
+      <h1 className="absolute w-[100dvw] left-0 z-30 text-yellowCustom font-bold bg-black p-8P pl-0 -mt-8M sm:mt-0 sm:p-16P sm:pl-0 text-center text-lg sm:text-2xl lg:text-3xl">
         {title}
       </h1>
       <div className="flex justify-center items-center">
         {audio === 'true' && (
           <button
             onClick={toggleAudio}
-            className="relative z-50 text-yellow-400 font-bold text-3xl"
+            className="relative z-50 text-yellowCustom font-bold text-3xl"
           >
             {isPlaying ? (
               <Unmute className="w-[2.5rem] sm:w-64W h-48H sm:h-64H -mb-16M" />
@@ -58,7 +57,7 @@ const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
         {cart === 'true' && (
           <Link
             href="/comanda"
-            className="relative z-50 text-yellow-400 font-bold text-3xl group"
+            className="relative z-50 text-yellowCustom font-bold text-3xl group"
           >
             {/* When visible shopping list */}
             {produse.length > 0 && produse[0].cantitate > 0 && (

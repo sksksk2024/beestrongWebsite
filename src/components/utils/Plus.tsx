@@ -13,7 +13,7 @@ const Plus = ({ className }: PlusProps) => {
       stroke="currentColor"
       fill="none"
       pathData="M4 12H20M12 4V20"
-      className={`text-yellow-400 hover:text-warning transition-colors duration-200
+      className={`text-yellowCustom hover:text-warning transition-colors duration-200
         ${className}
         `}
       label="plus-icon"

@@ -8,7 +8,6 @@ import { OrderSchema } from '@/lib/schemas';
 import PageWrapper from '@/components/contexts/PageWrapper';
 import Image from 'next/image';
 import { useProductListStore } from '@/components/hooks/productListStore';
-import { z } from 'zod';
 
 const Page = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -103,7 +102,7 @@ if (!validation.success) {
 
   return (
     <PageWrapper>
-      <div className="h-auto flex flex-col justify-center items-center gap-20 bg-black text-yellow-400 py-48P w-full lg:flex-row lg:gap-0 lg:py-0 lg:h-[100dvh]">
+      <div className="h-auto flex flex-col justify-center items-center gap-20 bg-black text-yellowCustom py-48P w-full lg:flex-row lg:gap-0 lg:py-0 lg:h-[100dvh]">
         <h1 className="hidden">Pagina de comanda</h1>
         <section className="flex flex-col justify-center items-start gap-2 mx-auto px-32P">
           <h2 className="text-center text-lg sm:text-2xl lg:text-3xl font-bold mb-16M mx-auto lg:mx-0 lg:text-start">
@@ -155,7 +154,7 @@ if (!validation.success) {
           )}
         </section>
         <form
-          className={`text-yellow-400 flex flex-col justify-center items-center gap-2 mx-auto
+          className={`text-yellowCustom flex flex-col justify-center items-center gap-2 mx-auto
             
             `}
         >

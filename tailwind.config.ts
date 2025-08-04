@@ -132,6 +132,7 @@ module.exports = {
         bounceCombo: 'bounceCombo 3.5s forwards',
       },
       colors: {
+        'yellowCustom': '#c6c63b',
         'cyan-light': '#00E6E6',
         'green-light': '#00D26A',
         'cyan-dark': '#00B3B3',

@@ -25,7 +25,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json(updatedOrder);
   } catch (error) {
-    console.error('Actualizare esuata:, error');
+    console.error('Actualizare esuata:', error);
     return NextResponse.json({ error: 'Actualizare esuata' }, { status: 500 });
   }
 }
@@ -40,7 +40,7 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json(
       {
-        error: 'Generare comenzi esuata',
+        error: `Generare comenzi esuata: ${error}`,
       },
       { status: 500 }
     );

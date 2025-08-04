@@ -13,7 +13,7 @@ const Minus = ({ className }: MinusProps) => {
       stroke="currentColor"
       fill="none"
       pathData="M4 12H40"
-      className={`text-yellow-400 hover:text-warning transition-colors duration-200
+      className={`text-yellowCustom hover:text-warning transition-colors duration-200
         ${className}
         `}
       label="minus-icon"

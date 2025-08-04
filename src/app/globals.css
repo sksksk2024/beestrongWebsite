@@ -22,7 +22,7 @@ img {
 body {
   font-family: 'Specter', sans-serif;
 }
-/* h1, h2, p, a, span, li, h3, div { color: rgb(198,198,59) } */
+h1, h2, p, a, span, li, h3, div { color: #c6c63b }
 /* color: rgb(198, 198, 59); */
 
 #bg {

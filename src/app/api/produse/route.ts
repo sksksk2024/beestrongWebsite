@@ -65,6 +65,7 @@ export async function POST(req: Request) {
             return NextResponse.json(product)
         }
     } catch (error) {
+      console.error('Error:', error)
         return NextResponse.json(
             {error: 'Creare produs esuata'},
             {status: 500}
@@ -86,6 +87,7 @@ export async function PATCH(req: Request) {
 
         return NextResponse.json(updatedProduct)
     } catch (error) {
+      console.error('Error', error)
         return NextResponse.json({
             error: 'Actualizare stoc esuata'
         }, {

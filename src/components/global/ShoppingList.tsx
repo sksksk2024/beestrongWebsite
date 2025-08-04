@@ -27,7 +27,7 @@ const ShoppingList = () => {
 
   return (
     <section
-      className={`fixed bottom-0 text-xl text-yellow-400 w-full z-40 text-center mx-auto ${listClass}`}
+      className={`fixed bottom-0 text-xl text-yellowCustom w-full z-40 text-center mx-auto ${listClass}`}
     >
       <div className="bg-black p-32P pt-64P w-full max-w-container-600 mx-auto rounded-t-16BR">
         <motion.div onClick={toggleList} className="relative bottom-32I">
@@ -35,7 +35,7 @@ const ShoppingList = () => {
         </motion.div>
         <h3 className="underline mb-32M text-2xl">Cumparaturile tale</h3>
         {itemsInCart.length === 0 ? (
-          <p className="text-yellow-400 text-center py-8">Cosul este gol</p>
+          <p className="text-yellowCustom text-center py-8">Cosul este gol</p>
         ) : (
           <ul>
             {produse.map((produs) => {
