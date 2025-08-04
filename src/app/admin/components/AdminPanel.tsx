@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-// @typescript-eslint/no-explicit-any
 
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
