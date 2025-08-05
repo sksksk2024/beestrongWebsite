@@ -191,7 +191,7 @@ const produseAlimentare = [
         src1: Food1,
         src2: Food1,
         nume: 'Loaded Honey cu Creatina',
-        pret: 35,
+        pret: 35.99,
       stocS: 99,
       stocM: 99,
       stocL: 99,
@@ -199,7 +199,7 @@ const produseAlimentare = [
     {
         id: 'cmdycjcqt000b9g808tiz5863',
         nume: 'Loaded Honey cu Ashwagandha',
-        pret: 39,
+        pret: 39.99,
       stocS: 99,
       stocM: 99,
       stocL: 99,
@@ -207,7 +207,7 @@ const produseAlimentare = [
     {
         id: 'cmdycjcqt000c9g806qk5mhwa',
         nume: 'Love Honey',
-        pret: 45,
+        pret: 45.99,
       stocS: 99,
       stocM: 99,
       stocL: 99,
