@@ -13,14 +13,19 @@ img {
 
 @font-face {
   font-family: 'Specter';
-  src: url('/public/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.otf') format('opentype');
+  src: url('/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.otf') format('opentype');
   font-weight: 900;
   font-style: italic;
   font-display: swap;
 }
 
+*,
 body {
-  font-family: 'Specter', sans-serif;
+  font-family: 'Specter';
+  src: url('/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
 }
 h1, h2, p, a, span, li, h3, div { color: #c6c63b }
 /* color: rgb(198, 198, 59); */
