@@ -90,7 +90,7 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
       [hoodie1, hoodie2, hoodie3],
     ]
     const alimentareImages = [
-      [Food1], [Food2], [Food3]
+      [Food1], [Food3], [Food2]
     ]
 
     // Define products with their DB IDs
