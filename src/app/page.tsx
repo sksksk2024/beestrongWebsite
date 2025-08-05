@@ -10,10 +10,7 @@ import PageWrapper from '@/components/contexts/PageWrapper';
 import Footer from '@/components/global/Footer';
 import Benefits from '@/components/global/Benefits';
 import Food1 from '@/../public/alimentara1.png';
-import Food2 from '@/../public/alimentara2.png';
-import Food3 from '@/../public/alimentara3.png';
 import Tricou1 from '@/../public/banner.jpg';
-import Tricou2 from '@/../public/Tricou2.jpg';
 import ShoppingList from '@/components/global/ShoppingList';
 import Link from 'next/link';
 import XMenu from '@/components/utils/XMenu';
@@ -27,8 +24,8 @@ export default function Home() {
     return orgMatches && roleMatches;
   });
 
-  const [hoveredFood, setHoveredFood] = useState<boolean>(false);
-  const [hoveredClothes, setHoveredClothes] = useState<boolean>(false);
+  const [, setHoveredFood] = useState<boolean>(false);
+  const [, setHoveredClothes] = useState<boolean>(false);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAlimenteModal, setIsAlimenteModal] = useState(false);

@@ -17,19 +17,15 @@ type AlimentareType = {
   marime?: MarimeType
 };
 
-const Alimentare = ({ images, nume, pret, disponibil = 100, idProdus }: AlimentareType) => {
+const Alimentare = ({ images, nume, pret, idProdus }: AlimentareType) => {
     const [availableStock, setAvailableStock] = useState(0);
     const [stoc, setStoc] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
+    const [, setIsHovered] = useState(false);
     const [, setLoading] = useState(true);
     const [, setError] = useState<string | null>(null);
   const { modificaCantitate, stergeProdus, adaugaProdus, produse } =
     useProductListStore();
   const productId = `aliment-${nume.toLowerCase().replace(/\s+/g, '-')}`;
-
-  const produsInCos = useProductListStore((state) =>
-    state.produse.find((p) => p.id === productId)
-  );
 
   // Fetch product stock on component mount
     useEffect(() => {

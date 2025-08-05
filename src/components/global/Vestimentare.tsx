@@ -39,13 +39,7 @@ const Tricou = ({ images, nume, pret,
     setLoading(true);
     try {
       const res = await fetch(`/api/produse?id=${idProdus}`);
-      // if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const p = await res.json();
-      const stockMap: Record<MarimeType, number> = {
-        S: p.stocS,
-        M: p.stocM,
-        L: p.stocL
-      };
       setStockMap({
         S: p.stocS,
         M: p.stocM,
