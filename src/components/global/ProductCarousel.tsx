@@ -85,9 +85,9 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
       [maieuNegru1, maieuNegru2, maieuNegru3],             // for Maieu Negru
       [maieuAlb1, maieuAlb2, maieuAlb3, maieuAlb4],        // for Maieu Alb
       [comNegru1, comNegru2, comNegru3, comNegru4, comNegru5, comNegru6],
+      [hoodie1, hoodie2, hoodie3],
       [comAlb1, comAlb2, comAlb3, comAlb4, comAlb5],
       [honey1, honey2, honey3, honey4, honey5],
-      [hoodie1, hoodie2, hoodie3],
     ]
     const alimentareImages = [
       [Food1], [Food3], [Food2]
