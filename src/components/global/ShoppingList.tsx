@@ -12,7 +12,12 @@ const ShoppingList = () => {
 
   const [down, setDown] = useState<boolean>(false);
 
-  const itemsInCart = produse.filter((produs) => produs.cantitate > 0);
+  const itemsInCart = produse.filter(
+    (produs) =>
+      produs.cantitate > 0 &&
+      produs.pret > 0 &&
+      !Number.isNaN(produs.pret)
+  );
 
   const totalGeneral = produse.reduce(
     (total, produs) => total + produs.cantitate * produs.pret,
