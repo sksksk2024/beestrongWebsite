@@ -175,14 +175,6 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
       stocM: 12,
       stocL: 10,
     },
-    // {
-    //     id: 'cmdycjcqt00009g808nl9fzjt',
-    //     nume: 'Zebra Jersey',
-    //     pret: 159.99,
-    //     stocS: 8,
-    //   stocM: 7,
-    //   stocL: 5,
-    // },
 ]
 
 const produseAlimentare = [
@@ -191,7 +183,7 @@ const produseAlimentare = [
         src1: Food1,
         src2: Food1,
         nume: 'Loaded Honey cu Creatina',
-        pret: 35.99,
+        pret: 37.99,
       stocS: 99,
       stocM: 99,
       stocL: 99,
@@ -207,7 +199,7 @@ const produseAlimentare = [
     {
         id: 'cmdycjcqt000c9g806qk5mhwa',
         nume: 'Love Honey',
-        pret: 45.99,
+        pret: 49.99,
       stocS: 99,
       stocM: 99,
       stocL: 99,
