@@ -188,7 +188,11 @@ export default function Home() {
             />
             {/* WIP: LOOP */}
             <div className="relative z-0 top-0 left-0 w-full h-[100dvh] object-cover aspect-video object-cover aspect-video">
-              <video
+              <video width="320" height="240" controls>
+      <source src="/videos/beeVideo.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+              {/* <video
                 ref={videoRef}
                 autoPlay
                 muted
@@ -202,7 +206,7 @@ export default function Home() {
                   type="video/mp4"
                 />
                 Browser-ul tău nu suportă tag-ul video.
-              </video>
+              </video> */}
             </div>
             <h2 className="relative bottom-52I sm:bottom-64I lg:bottom-75I z-40 text-yellowCustom font-bold bg-black p-16P text-center text-sm sm:text-lg lg:text-2xl">
               FORTA DIVINA, DIRECT DE LA ALBINA
