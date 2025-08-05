@@ -152,6 +152,14 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
       stocL: 6,
     },
     {
+        id: 'cmdycjcqt00089g80opx52zvq',
+        nume: 'Hoodie Rocket',
+        pret: 189.99,
+      stocS: 4,
+      stocM: 6,
+      stocL: 4,
+    },
+    {
       id: 'cmdycjcqt00079g80wvm5xnch',
       nume: 'Compression T-shirt alb',
       pret: 149.99,
@@ -165,14 +173,6 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
         pret: 159.99,
       stocS: 8,
       stocM: 7,
-      stocL: 4,
-    },
-    {
-        id: 'cmdycjcqt00089g80opx52zvq',
-        nume: 'Hoodie Rocket',
-        pret: 189.99,
-      stocS: 4,
-      stocM: 6,
       stocL: 4,
     },
 ]
