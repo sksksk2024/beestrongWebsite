@@ -9,7 +9,7 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-import { pushIt } from '../utils/sounds/sounds';
+// import { pushIt } from '../utils/sounds/sounds';
 
 type AudioContextType = {
   isPlaying: boolean;
@@ -24,7 +24,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
   //   Initialize audio element once
   useEffect(() => {
-    audioRef.current = new Audio(pushIt);
+    audioRef.current = new Audio('');
     audioRef.current.loop = true;
     audioRef.current.volume = 0.03
     return () => {
