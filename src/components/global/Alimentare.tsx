@@ -25,7 +25,6 @@ const Alimentare = ({ images, nume, pret, idProdus }: AlimentareType) => {
     const [, setError] = useState<string | null>(null);
   const { modificaCantitate, stergeProdus, adaugaProdus, produse } =
     useProductListStore();
-  const productId = `aliment-${nume.toLowerCase().replace(/\s+/g, '-')}`;
 
   // Fetch product stock on component mount
     useEffect(() => {
