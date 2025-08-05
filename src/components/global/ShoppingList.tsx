@@ -38,7 +38,14 @@ const ShoppingList = () => {
           <p className="text-yellowCustom text-center py-8">Cosul este gol</p>
         ) : (
           <ul>
-            {produse.map((produs) => {
+            {produse
+            .filter(
+    (produs) =>
+      produs.cantitate > 0 &&
+      produs.pret > 0 &&
+      !Number.isNaN(produs.pret)
+  )
+            .map((produs) => {
               const pretTotal = produs.cantitate * produs.pret;
               if (produs.cantitate === 0) return
               return (
