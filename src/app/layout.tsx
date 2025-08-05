@@ -19,18 +19,15 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="bg-black">
         <head>
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossOrigin="anonymous"
-          />
-          <link rel="icon" href="/beestrongIcon.ico" sizes="32x32" />
-          <link
-            rel="apple-touch-icon"
-            href="/beestrongIcon.ico"
-            sizes="32x32"
-          />
-        </head>
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href="https://js.stripe.com" />
+        <link rel="icon" href="/beestrongIcon.svg" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/beestrongIcon.svg" sizes="32x32" />
+      </head>
         <body className={`antialiased`}>
           <AudioProvider>
             {children}

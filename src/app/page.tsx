@@ -259,7 +259,8 @@ export default function Home() {
             <Card className="flex items-center text-5xl font-bold bg-black">
               <div className="bg absolute z-0 inset-0 w-full aspect-2/1 object-cover rounded-16BR bg-black" />
               <h2 className="relative top-96I sm:top-176I z-10 bg-black p-16P text-yellowCustom text-sm sm:text-lg lg:text-2xl">
-                COMUNITATE
+                {/* COMUNITATE */}
+                ???
               </h2>
             </Card>
           </div>
