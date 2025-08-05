@@ -19,7 +19,7 @@ type HeaderProps = {
 };
 
 const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
-  const { produse } = useProductListStore();
+  const produse = useProductListStore((state) => state.produse);
   const { isPlaying, toggleAudio } = useAudio();
 
   return (
@@ -60,7 +60,7 @@ const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
             className="relative z-50 text-yellowCustom font-bold text-3xl group"
           >
             {/* When visible shopping list */}
-            {produse.length > 0 && produse[0].cantitate > 0 && (
+            {produse.some(p => p.cantitate > 0) && (
               <motion.div
                 variants={pulsesVariants}
                 animate="visible"

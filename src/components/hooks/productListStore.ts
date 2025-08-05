@@ -6,12 +6,14 @@ type TipProdus = 'aliment' | 'vestimentar';
 
 export type Produs = {
   id: string;
+  productId: string;
   nume: string;
   pret: number;
   cantitate: number;
   disponibil: number;
   imagine: string;
   tip: TipProdus;
+  marime?: 'S' | 'M' | 'L';
 };
 
 interface StareLista {
@@ -24,6 +26,7 @@ interface StareLista {
   modificaCantitate: (id: string, modificare: number) => void;
   // Admin Only
   actualizeazaStoc: (id: string, stocNou: number) => void
+  modificaMarime: (productId: string, newSize: 'S'|'M'|'L') => void
 }
 
 export const useProductListStore = create<StareLista>()(
@@ -86,6 +89,16 @@ export const useProductListStore = create<StareLista>()(
           produs
           ),
         })),
+      modificaMarime: (productId, newSize) =>
+        set((state) => ({
+          produse: state.produse.map((produs) => 
+            produs.productId === productId
+          ? {
+            ...produs,
+            marime: newSize
+          } : produs
+          ),
+        }))
     }),
     { name: 'products-storage' }
   )

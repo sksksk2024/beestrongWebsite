@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Minus from '../utils/Minus';
 import Plus from '../utils/Plus';
 import { Card, CardContent } from '../ui/card';
@@ -6,52 +6,79 @@ import Image, { StaticImageData } from 'next/image';
 import { CarouselItem } from '../ui/carousel';
 import { useProductListStore } from '../hooks/productListStore';
 import { getImageUrl } from '../utils/imageHelpers';
+import { MarimeType } from '../utils/types';
 
 type AlimentareType = {
-  src1: string | StaticImageData;
-  src2: string | StaticImageData;
+  images: (string | StaticImageData)[]
   nume: string;
-  disponibil?: number
+  disponibil?: number;
+  idProdus: string;
   pret: number;
+  marime?: MarimeType
 };
 
-const Alimentare = ({ src1, src2, nume, pret, disponibil = 100 }: AlimentareType) => {
-  const { modificaCantitate, stergeProdus, adaugaProdus } =
+const Alimentare = ({ images, nume, pret, disponibil = 100, idProdus }: AlimentareType) => {
+    const [availableStock, setAvailableStock] = useState(0);
+    const [stoc, setStoc] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [, setLoading] = useState(true);
+    const [, setError] = useState<string | null>(null);
+  const { modificaCantitate, stergeProdus, adaugaProdus, produse } =
     useProductListStore();
   const productId = `aliment-${nume.toLowerCase().replace(/\s+/g, '-')}`;
-
-  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const produsInCos = useProductListStore((state) =>
     state.produse.find((p) => p.id === productId)
   );
 
-  const currentQuantity = produsInCos?.cantitate || 0;
+  // Fetch product stock on component mount
+    useEffect(() => {
+    async function load() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/produse?id=${idProdus}`);
+        // if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const p = await res.json();
+       setAvailableStock(p.stocS);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load stock');
+        setAvailableStock(0);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [idProdus]);
+
+  const produs = produse.find(p => p.id === idProdus);
+  const currentQuantity = produs?.cantitate || 0;
 
   const handleModifyQuantity = (change: number) => {
-    const newQuantity = currentQuantity + change;
-
-    if (newQuantity > 0) {
-      // If product exists, modify quantity
-      if (produsInCos) {
-        modificaCantitate(productId, change);
-      } else {
-        // If product doesn't exist, add it with quantity 1
+     const newQuantity = currentQuantity + change;
+  
+      if (newQuantity < 0 || newQuantity > availableStock) return;
+  
+      if (currentQuantity > 0) {
+        // Modify existing product quantity
+        modificaCantitate(idProdus, change);
+      } else if (newQuantity > 0) {
+        // Add new product
         adaugaProdus({
-          id: productId,
+          id: idProdus,
+          productId: idProdus,
           nume: nume,
           pret: pret,
-          cantitate: 1,
-          disponibil: disponibil,
-          imagine: getImageUrl(src1),
+          cantitate: newQuantity,
+          disponibil: availableStock,
+          imagine: getImageUrl(images[0]),
           tip: 'aliment',
         });
+      } else if (currentQuantity > 0 && newQuantity <= 0) {
+        // Remove product
+        stergeProdus(idProdus);
       }
-    } else if (currentQuantity > 0) {
-      // If new quantity would be <= 0, remove the product
-      stergeProdus(productId);
-    }
-  };
+    };
 
   return (
     <CarouselItem id={nume} className="basis-[66%] max-w-[66%] px-2">
@@ -62,12 +89,25 @@ const Alimentare = ({ src1, src2, nume, pret, disponibil = 100 }: AlimentareType
             onMouseLeave={() => setIsHovered(false)}
             className="relative flex items-center justify-center h-[9.375rem] cursor-pointer group mt-64M"
           >
-            <div className="text-xl absolute z-50 duration-300 group-hover:scale-125 right-0 bottom-[196px] font-bold bg-gray-800 rounded-tr-16BR rounded-bl-16BR border-2 border-black px-16P py-8P">
-              {pret}
+            {stoc ? (
+              <div 
+            onClick={() => setStoc(!stoc)}
+            className="px-32P text-xl absolute -top-[100px] w-full h-1/2 z-50 duration-300 group-hover:scale-106 font-bold bg-gray-800/60 rounded-t-16BR px-16P py-8P">
+            <div className="">
+              Stoc: {availableStock - currentQuantity} ramase
             </div>
+            <div className="">
+              Cost: {pret} lei
+            </div>
+            </div>
+            ) : (
+              <div 
+              onClick={() => setStoc(!stoc)}
+              className="text-xl absolute z-50 duration-300 group-hover:scale-119 right-0 bottom-[196px] font-bold bg-gray-800 rounded-tr-16BR rounded-bl-16BR border-2 border-black px-16P py-8P">Detalii</div>
+            )}
             <Image
               className={`relative bottom-24I object-cover aspect-2/2 rounded-16BR transition-transform duration-300 group-hover:scale-105`}
-              src={isHovered ? src2 : src1}
+              src={images[0]}
               width={300}
               height={300}
               alt={nume}

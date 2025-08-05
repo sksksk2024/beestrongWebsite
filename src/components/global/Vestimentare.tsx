@@ -6,91 +6,107 @@ import Image, { StaticImageData } from 'next/image';
 import { CarouselItem } from '../ui/carousel';
 import { useProductListStore } from '../hooks/productListStore';
 import { getImageUrl } from '../utils/imageHelpers';
+import { MarimeType } from '../utils/types';
+import { motion } from 'framer-motion';
 
 type TricouType = {
-  src1: string | StaticImageData;
-  src2: string | StaticImageData;
+  images: (string | StaticImageData)[]
   nume: string;
   pret: number;
   idProdus: string;
+  marime?: MarimeType
 };
 
-const Tricou = ({ src1, src2, nume, pret, 
+const Tricou = ({ images, nume, pret, 
   idProdus
  }: TricouType) => {
-  // const productId = `vesimentar-${nume.toLowerCase().replace(/\s+/g, '-')}`;
-
-  const [availableStock, setAvailableStock] = useState(0);
+  const [marime, setMarime] = useState<MarimeType>('S');
+  const [stockMap, setStockMap] = useState<Record<MarimeType, number>>({
+  S: 0,
+  M: 0,
+  L: 0
+});
   const [stoc, setStoc] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [, setIsHovered] = useState(false);
   const [, setLoading] = useState(true);
   const [, setError] = useState<string | null>(null);
 
   const { stergeProdus, modificaCantitate, adaugaProdus, produse } = useProductListStore();
-  
-  // Get current quantity from store
-  const currentQuantity = produse.find(p => p.id === idProdus)?.cantitate || 0;
-
-  // const produsInCos = useProductListStore((state) =>
-  //   state.produse.find((p) => p.id === productId)
-  // );
-
-  // const currentQuantity = produsInCos?.cantitate || 0;
 
   // Fetch product stock on component mount
   useEffect(() => {
-    const fetchStock = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`/api/produse?id=${idProdus}`);
-        
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        
-        const product = await res.json();
-        
-        if (!product) {
-          throw new Error('Product not found');
-        }
-        
-        setAvailableStock(product.stoc || 0);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch stock:', err);
-        setError('Failed to load product data');
-        setAvailableStock(10); // fallback
-      } finally {
-        setLoading(false);
-      }
+  async function load() {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/produse?id=${idProdus}`);
+      // if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const p = await res.json();
+      const stockMap: Record<MarimeType, number> = {
+        S: p.stocS,
+        M: p.stocM,
+        L: p.stocL
+      };
+      setStockMap({
+        S: p.stocS,
+        M: p.stocM,
+        L: p.stocL
+      });
+    } catch (err) {
+      console.error(err);
+      setError('Failed to load stock');
+      setStockMap({
+        S: 0,
+        M: 0,
+        L: 0
+      });
+    } finally {
+      setLoading(false);
     }
-    fetchStock()
-  }, [idProdus])
+  }
+  load();
+}, [idProdus, marime]);
 
+const [current, setCurrent] = useState(0)
+
+  // every 5 seconds advance to the next image (wrap around)
+  useEffect(() => {
+    const iv = setInterval(() => {
+      setCurrent((i) => (i + 1) % images.length)
+    }, 5000)
+    return () => clearInterval(iv)
+  }, [images.length])
+  
+  const uniqueId = `${idProdus}-${marime}`;
+  const produs = produse.find(p => p.id === uniqueId);
+  const currentQuantity = produs?.cantitate || 0;
   const handleModifyQuantity = (change: number) => {
    const newQuantity = currentQuantity + change;
 
-    if (newQuantity < 0 || newQuantity > availableStock) return;
+    if (newQuantity < 0 || newQuantity > stockMap[marime]) return;
 
     if (currentQuantity > 0) {
       // Modify existing product quantity
-      modificaCantitate(idProdus, change);
+      modificaCantitate(uniqueId, change);
     } else if (newQuantity > 0) {
       // Add new product
+      const sizeSuffix = marime || 'S'; // default to "S" if none selected
+
       adaugaProdus({
-        id: idProdus,
+        id: uniqueId,
+        productId: idProdus,
         nume: nume,
         pret: pret,
         cantitate: newQuantity,
-        disponibil: availableStock,
-        imagine: getImageUrl(src1),
+        disponibil: stockMap[marime],
+        imagine: getImageUrl(images[0]),
         tip: 'vestimentar',
+        marime: sizeSuffix
       });
     } else if (currentQuantity > 0 && newQuantity <= 0) {
       // Remove product
-      stergeProdus(idProdus);
+      stergeProdus(uniqueId);
     }
-  };
+  }
 
   return (
     <CarouselItem id={nume} className="basis-[66%] max-w-[66%] px-2">
@@ -104,26 +120,51 @@ const Tricou = ({ src1, src2, nume, pret,
             {stoc ? (
             <div 
             onClick={() => setStoc(!stoc)}
-            className="px-32P text-xl absolute -top-[100px] w-full h-1/2 z-50 duration-300 group-hover:scale-106 font-bold bg-gray-800/60 rounded-t-16BR px-16P py-8P">
-            <div className="">
-              Stoc: {availableStock - currentQuantity} ramase
+            className="px-32P text-xl absolute -top-[100px] w-full h-[300px] rounded-16BR z-50 duration-300 group-hover:scale-106 font-bold bg-gray-800/60 rounded-t-16BR px-16P py-8P">
+                          <h3 className='mb-8M'>Stocuri:</h3>
+                          <div className="flex flex-col gap-1 sm:gap-4 w-full text-black">
+                            {(['S','M','L'] as MarimeType[]).map(s => {
+                              const sizeQuantity = produse.find(p => p.id === `${idProdus}-${s}`)?.cantitate || 0;
+                              const remaining = stockMap[s] - sizeQuantity;
+                              return (
+                              <button 
+                              onClick={() => {
+                                setMarime(s)
+                                // modificaMarime(uniqueId, s) 
+                                setStoc(false)
+                              }}
+                              key={s}
+                              type='button' className={`rounded-16BR text-sm text-center py-8P  px-16P font-bold cursor-pointer hover:scale-105
+                                ${marime === s ? 'bg-gray-800 text-yellowCustom' : 'bg-gray-400 text-white'}
+                                `}
+                              >{s} ( {remaining} ramase )</button>
+                            )})}
+                          </div>
+                          <div className="mt-8M">
+             Cost: {pret} lei
             </div>
-            <div className="">
-              Cost: {pret} lei
-            </div>
-            </div>
+                          </div>
             ) : (
               <div 
               onClick={() => setStoc(!stoc)}
               className="text-xl absolute z-50 duration-300 group-hover:scale-119 right-0 bottom-[196px] font-bold bg-gray-800 rounded-tr-16BR rounded-bl-16BR border-2 border-black px-16P py-8P">Detalii</div>
             )}
-            <Image
-              className={`relative bottom-24I object-cover aspect-2/2 rounded-16BR transition-transform duration-300 group-hover:scale-105`}
-              src={isHovered ? src2 : src1}
-              width={300}
-              height={300}
-              alt={nume}
-            />
+            <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <Image
+            src={images[current]}
+            alt={nume}
+            className={`relative bottom-24I object-cover aspect-2/2 rounded-16BR transition-transform duration-300 group-hover:scale-105`}
+            
+          />
+        </motion.div>
+
+
           </CardContent>
         </Card>
         <div className="flex items-center justify-center gap-10 cursor-pointer h-112H relative bottom-64I">
@@ -143,7 +184,7 @@ const Tricou = ({ src1, src2, nume, pret,
           />
           <button
             onClick={() => handleModifyQuantity(1)}
-            disabled={currentQuantity >= availableStock}
+            disabled={currentQuantity >= stockMap[marime]}
             className="bg-black h-48H w-48W rounded-16BR"
           >
             <Plus className="pl-[0.6rem]" />

@@ -18,17 +18,17 @@ type InvalidProduct = {
 const Page = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { produse, golesteLista } = useProductListStore();
-  const totalGeneral = produse.reduce(
+  let totalGeneral = produse.reduce(
     (total, produs) => total + produs.cantitate * produs.pret,
     0
   );
+  totalGeneral += 20
 
   const [formData, setFormData] = useState({
     nume: '',
     email: '',
     telefon: '',
-    marimeTricou: '',
-    marimePantaloni: '',
+    adresa: '',
     codPostal: '',
   });
   const [status, setStatus] = useState({ message: '', error: false });
@@ -60,12 +60,14 @@ if (!validation.success) {
 
     const order = {
       ...formData,
-      iteme: produse.map(p => ({
-        productId: p.id,
+      iteme: produse.filter(p => p.cantitate > 0).map(p => ({
+        productId: p.productId,
         nume: p.nume,
         cantitate: p.cantitate,
         pret: p.pret,
-        imagine:   p.imagine
+        imagine:   p.imagine,
+        marime: p.marime,
+        tip: p.tip
       })),
       total: totalGeneral
     };
@@ -77,8 +79,11 @@ if (!validation.success) {
     });
 
     const responseData = await res.json();
+
+    console.log('📬 /api/comanda status:', res.status, 'body:', responseData);
     
     if (!res.ok) {
+      console.log('API error payload:', responseData);
       if (responseData.invalidProducts) {
         const errorDetails = responseData.invalidProducts
           .map((p: InvalidProduct) => `• ${p.nume || p.productId}: ${p.error}`)
@@ -150,7 +155,13 @@ if (!validation.success) {
             })}
             <li className="underline">
               <div className="flex justify-between items-center gap-10">
-                <h3>Pret total: </h3>
+                Acceptam doar bani cash
+              </div>
+            </li>
+            <hr className="bg-gray-400 h-1 w-full my-[1rem]" />
+            <li className="underline">
+              <div className="flex justify-between items-center gap-10">
+                <h3>Pret total + 20 de lei transport: </h3>
                 <p>
                   <span>{totalGeneral}</span> lei
                 </p>
@@ -164,7 +175,7 @@ if (!validation.success) {
             
             `}
         >
-          <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold text-center font-bold mb-16M">
+          <h2 className="f sm:text-2xl lg:text-3xl font-bold text-center font-bold mb-16M">
             Trimite mesaj echipei!
           </h2>
           <input
@@ -174,6 +185,11 @@ if (!validation.success) {
             value={formData.nume}
             onChange={(e) => setFormData({ ...formData, nume: e.target.value })}
           />
+          {fieldErrors.nume && (
+    <p 
+    id='important'
+    className="text-sm mt-1  mb-16M text-red-500">{fieldErrors.nume}</p>
+  )}
           <input
             className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="email"
@@ -183,24 +199,11 @@ if (!validation.success) {
               setFormData({ ...formData, email: e.target.value })
             }
           />
-          <input
-            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
-            type="text"
-            placeholder="Marimea ta la tricou"
-            value={formData.marimeTricou}
-            onChange={(e) =>
-              setFormData({ ...formData, marimeTricou: e.target.value })
-            }
-          />
-          <input
-            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
-            type="text"
-            placeholder="Marimea ta la pantaloni"
-            value={formData.marimePantaloni}
-            onChange={(e) =>
-              setFormData({ ...formData, marimePantaloni: e.target.value })
-            }
-          />
+          {fieldErrors.email && (
+    <p 
+    id='important'
+    className="text-sm mt-1  mb-16M text-red-500">{fieldErrors.email}</p>
+  )}
           <input
             className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="text"
@@ -210,6 +213,26 @@ if (!validation.success) {
               setFormData({ ...formData, telefon: e.target.value })
             }
           />
+          {fieldErrors.telefon && (
+    <p 
+    id='important'
+    className="text-sm mt-1  mb-16M text-red-500">{fieldErrors.telefon}</p>
+  )}
+          <input
+            className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
+            type="text"
+            placeholder="Adresa"
+            value={formData.adresa}
+            onChange={(e) =>
+              setFormData({ ...formData, adresa: e.target.value })
+            }
+          />
+          {fieldErrors.adresa && (
+    <p 
+    id='important'
+    className="text-sm mt-1  mb-16M"
+    >{fieldErrors.adresa}</p>
+  )}
           <input
             className="p-2 rounded min-w-container-300 w-full max-w-container-600 border border-gray-600 appearance-none focus:outline-2 focus:outline-offset-2 focus:border-blue-600 focus:outline-solid focus:shadow-outline"
             type="text"
@@ -234,11 +257,9 @@ if (!validation.success) {
           >
             {isSubmitting ? 'SE TRIMITE...' : 'TRIMITE'}
           </motion.button>
-          {fieldErrors.nume && (
-            <p className={`text-sm mt-8M text-red-500`}>{fieldErrors.nume}</p>
-          )}
           {status.message && (
   <p
+  id='important'
     className={`text-sm mt-8M ${
       status.error ? 'text-red-500' : 'text-green-500'
     }`}

@@ -9,9 +9,10 @@ import ProductCarousel from '@/components/global/ProductCarousel';
 import PageWrapper from '@/components/contexts/PageWrapper';
 import Footer from '@/components/global/Footer';
 import Benefits from '@/components/global/Benefits';
-import Food1 from '@/../public/alimentare.jpg';
-import Food2 from '@/../public/alimentare2.jpg';
-import Tricou1 from '@/../public/Tricou1.jpg';
+import Food1 from '@/../public/alimentara1.png';
+import Food2 from '@/../public/alimentara2.png';
+import Food3 from '@/../public/alimentara3.png';
+import Tricou1 from '@/../public/banner.jpg';
 import Tricou2 from '@/../public/Tricou2.jpg';
 import ShoppingList from '@/components/global/ShoppingList';
 import Link from 'next/link';
@@ -229,8 +230,8 @@ export default function Home() {
               className="relative z-10 w-full max-w-container-400 h-[16.875rem] 2xs:h-[20.625rem] xs:h-400H group overflow-hidden cursor-pointer"
             >
               <Image
-                className="absolute inset-0 object-cover aspect-2/2 rounded-16BR transition-transform duration-300 group-hover:scale-105"
-                src={hoveredFood ? Food2 : Food1}
+                className="absolute -top-16I object-cover aspect-2/2 rounded-16BR transition-transform duration-300 scale-108 group-hover:scale-110"
+                src={Food1}
                 alt="img"
               />
               <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem]">
@@ -245,8 +246,9 @@ export default function Home() {
               className="relative z-10 w-full max-w-container-400 h-[16.875rem] 2xs:h-[20.625rem] xs:h-400H group overflow-hidden cursor-pointer"
             >
               <Image
-                className="absolute inset-0 object-cover aspect-2/2 xs:aspect-2/2 rounded-16BR transition-transform duration-300 group-hover:scale-105"
-                src={hoveredClothes ? Tricou2 : Tricou1}
+                className="absolute -top-48I object-cover aspect-2/2 xs:aspect-1/2 rounded-16BR transition-transform duration-300 group-hover:scale-105"
+                src={Tricou1}
+                // src={hoveredClothes ? Tricou2 : Tricou1}
                 alt="img"
               />
               <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem]">

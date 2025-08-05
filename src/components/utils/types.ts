@@ -1,11 +1,14 @@
 // src/types.ts
 
+export type MarimeType = 'S' | 'M' | 'L'
+
 export type OrderItem = {
   productId: string;
   nume: string;
   cantitate: number;
   pret: number;
   imagine: string;
+  marime?: 'S' | 'M' | 'L'
 };
 
 export type Order = {

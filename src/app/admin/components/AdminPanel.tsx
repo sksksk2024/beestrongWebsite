@@ -9,38 +9,14 @@ import Link from 'next/link';
 import { buttonVariants } from '@/components/motionVariants/motionVariants';
 import XMenu from '@/components/utils/XMenu';
 import Minus from '@/components/utils/Minus';
-// import { useProductListStore } from '@/components/hooks/productListStore';
 import { SignOutButton } from '@clerk/nextjs';
-// import Food1 from '@/../public/alimentare.jpg';
-// import Food2 from '@/../public/alimentare2.jpg';
-// import Tricou1 from '@/../public/tigru1.jpg';
-// import Tricou11 from '@/../public/tigru2.jpg';
-// import Tricou2 from '@/../public/rocket1.jpg';
-// import Tricou22 from '@/../public/stelar2.jpg';
-// import Tricou3 from '@/../public/pantaloniNegri1.jpg';
-// import Tricou33 from '@/../public/pantaloniNegri2.jpg';
-// import Tricou4 from '@/../public/pantaloniAlbastri1.jpg';
-// import Tricou44 from '@/../public/pantaloniAlbastri2.jpg';
-// import Tricou5 from '@/../public/maieu1.jpg';
-// import Tricou55 from '@/../public/maieu2.jpg';
-// import Tricou6 from '@/../public/jeAlb1.jpg';
-// import Tricou66 from '@/../public/jeAlb2.jpg';
-// import Tricou7 from '@/../public/je1.jpg';
-// import Tricou77 from '@/../public/je2.jpg';
-// import Tricou8 from '@/../public/fire1.jpg';
-// import Tricou88 from '@/../public/fire2.jpg';
-// import Tricou9 from '@/../public/beast1.jpg';
-// import Tricou99 from '@/../public/beast2.jpg';
-// import Tricou10 from '@/../public/albRocket1.jpg';
-// import Tricou101 from '@/../public/albRocket2.jpg';
 
 interface Order {
   id: string;
   numeClient: string;
   email: string;
   telefon: string;
-  marimeTricou: string;
-  marimePantaloni: string;
+  adresa: string;
   codPostal: string;
   iteme: {
     id: string;
@@ -198,8 +174,7 @@ const AdminPanel = () => {
               <th className="text-left p-2">Nume</th>
               <th className="text-left p-2">Numar de telefon</th>
               <th className="text-left p-2">Email</th>
-              <th className="text-left p-2">Marime haina</th>
-              <th className="text-left p-2">Marime pantaloni</th>
+              <th className="text-left p-2">Adresa</th>
               <th className="text-left p-2">Cod postal</th>
               <th className="text-left p-2">Cumparaturi</th>
               <th className="text-left p-2">Status</th>
@@ -211,8 +186,7 @@ const AdminPanel = () => {
                 <td className="p-2">{order.numeClient}</td>
                 <td className="p-2">{order.telefon}</td>
                 <td className="p-2">{order.email}</td>
-                <td className="p-2">{order.marimeTricou}</td>
-                <td className="p-2">{order.marimePantaloni}</td>
+                <td className="p-2">{order.adresa}</td>
                 <td className="p-2">{order.codPostal}</td>
                 <td className="p-2">
                   <motion.div onClick={() => toggleOrderDetails(order)}>
@@ -220,6 +194,7 @@ const AdminPanel = () => {
                   </motion.div>
                 </td>
                 <td
+                id={`${order.status === 'Livrat' ? 'success' : 'important'}`}
                   // order.id
                   onClick={() =>
                     updateOrderStatus(
@@ -261,7 +236,7 @@ const AdminPanel = () => {
                             height={100}
                             alt="img"
                           />
-                          <h3>{item.nume}</h3>
+                          <h3>{item.nume}{item.marime ? ` (${item.marime})` : ''}</h3>
                           <p>
                             Pret{' '}
                             <span>
@@ -277,7 +252,7 @@ const AdminPanel = () => {
                 })}
                 <li className="underline overflow-x-auto">
                   <div className="flex justify-between items-center gap-10">
-                    <h3>Pret total: </h3>
+                    <h3>Pret total + Transport: </h3>
                     <p>
                       <span>{selectedOrder.total}</span> lei
                     </p>

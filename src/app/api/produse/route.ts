@@ -9,7 +9,16 @@ export async function GET(req: Request) {
 
     if (id) {
       const product = await prisma.product.findUnique({
-        where: { id }
+        where: { id },
+  select: {
+    id: true,
+    nume: true,
+    pret: true,
+    imagine: true,
+    stocS: true,
+    stocM: true,
+    stocL: true,
+  },
       });
       
       if (!product) {
@@ -19,11 +28,17 @@ export async function GET(req: Request) {
         );
       }
       
-      return NextResponse.json(product);
+      return NextResponse.json({id: product.id,
+  nume: product.nume,
+  imagine: product.imagine,
+  stocS: product.stocS,
+  stocM: product.stocM,
+  stocL: product.stocL,
+  pret: product.pret});
     } else {
       // Only make one query based on the need
       const products = await prisma.product.findMany({
-        select: { id: true, nume: true, stoc: true }
+        select: { id: true, nume: true, stocS: true, stocM: true, stocL: true }
       });
       return NextResponse.json(products);
     }
@@ -44,10 +59,10 @@ export async function POST(req: Request) {
     try {
         const data = await req.json()
 
-        if (data.id) {
+        if (data.productId) {
             // Fetch product by ID
             const produs = await prisma.product.findUnique({
-                where: {id: data.id}
+                where: {id: data.productId}
             })
             return NextResponse.json(produs)
         } else {
@@ -56,13 +71,21 @@ export async function POST(req: Request) {
                 data: {
                     nume: data.nume,
                     pret: data.pret,
-                    stoc: data.stoc,
+                    stocS: data.stocS,
+                    stocM: data.stocM,
+                    stocL: data.stocL,
                     imagine: data.imagine,
                     categorie: data.categorie,
                     descriere: data.descriere
                 }
             })
-            return NextResponse.json(product)
+            return NextResponse.json({id: product.id,
+  nume: product.nume,
+  imagine: product.imagine,
+  stocS: product.stocS,
+  stocM: product.stocM,
+  stocL: product.stocL,
+  pret: product.pret})
         }
     } catch (error) {
       console.error('Error:', error)
@@ -76,12 +99,14 @@ export async function POST(req: Request) {
 // PATCH update product stock
 export async function PATCH(req: Request) {
     try {
-        const { id, stoc } = await req.json()
+        const { id, stocS, stocM, stocL } = await req.json()
 
         const updatedProduct = await prisma.product.update({
             where: {id},
             data: {
-                stoc
+                stocS,
+                stocM,
+                stocL
             }
         })
 

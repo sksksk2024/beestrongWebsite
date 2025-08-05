@@ -26,6 +26,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     audioRef.current = new Audio(pushIt);
     audioRef.current.loop = true;
+    audioRef.current.volume = 0.03
     return () => {
       // Cleanup on unmount
       if (audioRef.current) {

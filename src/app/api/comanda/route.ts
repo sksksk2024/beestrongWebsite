@@ -14,6 +14,8 @@ type Iteme = {
   cantitate: number;
   pret: number;
   imagine: string;
+  tip: 'aliment' | 'vestimentar'
+  marime?: 'S' | 'M' | 'L'
 };
 
 // UPDATE STATUS OF AN ORDER
@@ -36,7 +38,8 @@ export async function PATCH(req: Request) {
     return NextResponse.json(updatedOrder);
   } catch (error) {
     console.error('Actualizare esuata:', error);
-    return NextResponse.json({ error: 'Actualizare esuata' }, { status: 500 });
+  const message = error instanceof Error ? error.message : 'Unknown server error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -60,6 +63,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const orderData = await req.json();
+    console.log('📥 /api/comanda payload:', orderData);
 
     // Validate required fields
     if (!orderData.email || !orderData.telefon) {
@@ -71,10 +75,7 @@ export async function POST(req: Request) {
 
     // Verify all products exist and have sufficient stock
 const productIds = orderData.iteme.map((i:any) => i.productId);
-const products = await prisma.product.findMany({
-  where: { id: { in: productIds } },
-  select: { id: true, stoc: true, nume: true },
-});
+const products    = await prisma.product.findMany({ where: { id: { in: productIds } } });
 
 // then build a map for quick lookup:
 const productsMap = Object.fromEntries(products.map(p => [p.id, p]));
@@ -84,8 +85,9 @@ const invalidProducts = orderData.iteme.map((item: OrderItem) => {
   if (!prod) {
     return { valid: false, productId: item.productId, error: 'Produsul nu există' };
   }
-  if (prod.stoc < item.cantitate) {
-    return { valid: false, productId: item.productId, productName: prod.nume, available: prod.stoc, requested: item.cantitate, error: 'Stoc insuficient' };
+  const key = `stoc${item.marime ?? 'S'}` as 'stocS' | 'stocM' | 'stocL';
+  if ((prod as any)[key] < item.cantitate) {
+    return { valid: false, productId: item.productId, productName: prod.nume, available: (prod as any)[key], requested: item.cantitate, error: 'Stoc insuficient' };
   }
   return { valid: true, productId: item.productId };
 }).filter((v: any) => !v.valid);
@@ -104,21 +106,29 @@ if (invalidProducts.length) {
     where: {
       id: { in: orderData.iteme.map((i: any) => i.productId) }
     },
-    select: { id: true, stoc: true, nume: true }
+    select: { id: true, stocS: true, stocM: true, stocL: true, nume: true }
   });
 
   // Verify all products were found
   if (products.length !== orderData.iteme.length) {
-    const missingIds = orderData.iteme
-      .filter((i: any) => !products.some(p => p.id === i.productId))
-      .map((i: any) => i.productId);
+const missingIds = orderData.iteme
+  .map((i: any) => i.productId)
+  .filter((id: string) => !products.some(p => p.id === id));
+
+// Throw only if real missing IDs exist:
+if (missingIds.length > 0) {
+  const uniq = Array.from(new Set(missingIds));
+  throw new Error(`Produse lipsă: ${uniq.join(', ')}`);
+}
+
     throw new Error(`Produse lipsă: ${missingIds.join(', ')}`);
   }
 
   // Verify stock
   const outOfStock = products.filter(p => {
     const item = orderData.iteme.find((i: any) => i.productId === p.id);
-    return p.stoc < item!.cantitate;
+    const key = `stoc${item.marime ?? 'S'}` as 'stocS'|'stocM'|'stocL';
+    return (p as any)[key] < item!.cantitate;
   });
 
   if (outOfStock.length > 0) {
@@ -129,11 +139,30 @@ if (invalidProducts.length) {
 
   // Update stocks
   await Promise.all(
-    orderData.iteme.map((item: Iteme) =>
-      tx.product.update({
-        where: { id: item.productId },
-        data: { stoc: { decrement: item.cantitate } }
-      })
+    orderData.iteme.map((item: Iteme) =>{
+      const field = item.marime === 'M'
+  ? 'stocM'
+  : item.marime === 'L'
+    ? 'stocL'
+    : 'stocS';
+
+      const updates = item.tip === 'aliment'
+  ? {
+      stocS: { decrement: item.cantitate },
+      stocM: { decrement: item.cantitate },
+      stocL: { decrement: item.cantitate },
+    }
+  : {
+      // your existing size‐switch logic
+      [field]: { decrement: item.cantitate }
+    };
+
+return tx.product.update({
+  where: { id: item.productId },
+  data: updates
+});
+
+    }
     )
   );
 
@@ -143,8 +172,7 @@ if (invalidProducts.length) {
       numeClient: orderData.nume,
       email: orderData.email,
       telefon: orderData.telefon,
-      marimeTricou: orderData.marimeTricou || 'N/A',
-      marimePantaloni: orderData.marimePantaloni || 'N/A',
+      adresa: orderData.adresa,
       codPostal: orderData.codPostal,
       iteme: orderData.iteme,
       total: orderData.total,
@@ -164,8 +192,8 @@ if (invalidProducts.length) {
     //     numeClient: orderData.nume,
     //     email: orderData.email,
     //     telefon: orderData.telefon,
-    //     marimeTricou: orderData.marimeTricou || 'N/A',
-    //     marimePantaloni: orderData.marimePantaloni || 'N/A',
+    //     marimeTricou: orderData.marimeTricou || 'S',
+    //     marimePantaloni: orderData.marimePantaloni || 'S',
     //     codPostal: orderData.codPostal,
     //     iteme: orderData.iteme,
     //     total: orderData.total,
@@ -182,7 +210,7 @@ if (invalidProducts.length) {
       .map(
         (product: any) => `
         <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-          <h3 style="margin: 0; color: #333;">${product.nume}</h3>
+          <h3 style="margin: 0; color: #333;">${product.nume}${product.marime ? `(${product.marime})` : ''}</h3>
           <p style="margin: 5px 0; color: #666;">
             Cantitate: ${product.cantitate} × ${product.pret} RON = ${product.cantitate * product.pret} RON
           </p>
@@ -206,9 +234,8 @@ if (invalidProducts.length) {
             <p><strong>Nume:</strong> ${orderData.nume || 'Nu exista'}</p>
             <p><strong>Email:</strong> ${orderData.email}</p>
             <p><strong>Telefon:</strong> ${orderData.telefon}</p>
+            <p><strong>Adresă:</strong> ${orderData.adresa}</p>
             <p><strong>Cod Postal:</strong> ${orderData.codPostal || 'Nu exista'}</p>
-            <p><strong>Marime Tricou:</strong> ${orderData.marimeTricou || 'N/A'}</p>
-            <p><strong>Marime Pantaloni:</strong> ${orderData.marimePantaloni || 'N/A'}</p>
           </div>
           
           <h3 style="margin-bottom: 5px;">Produsele Comandate</h3>
@@ -263,7 +290,8 @@ if (invalidProducts.length) {
 
     return NextResponse.json({ success: true, orderId: result });
   } catch (error) {
-    console.error('Trimitere esuata:', error);
-    return NextResponse.json({ error: 'Eroare la procesare' }, { status: 500 });
+    console.error('🔥 Comanda POST failed:', error);
+  const message = error instanceof Error ? error.message : 'Unknown server error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

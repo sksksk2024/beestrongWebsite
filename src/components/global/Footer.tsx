@@ -42,7 +42,7 @@ const Footer = () => {
         className=" relative z-50 flex items-center gap-2"
       >
         <Phone />
-        <span>(+40)719-832-756</span>
+        <span>(+40)755-073-716</span>
       </Link>
       <Link
         href="mailto:george.beestrong@gmail.com"

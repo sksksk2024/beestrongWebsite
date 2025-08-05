@@ -59,7 +59,7 @@ const ShoppingList = () => {
                           (e.target as HTMLImageElement).src = '/pantaloni.jpg'; // Fallback
                         }}
                       />
-                      <h3>{produs.nume}</h3>
+                      <h3>{produs.nume}{produs.tip === 'vestimentar' && `(${produs.marime || 'S'})`}</h3>
                       <h3>
                         Pret{' '}
                         <span>

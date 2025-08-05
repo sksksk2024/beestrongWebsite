@@ -19,7 +19,9 @@ model Product {
   id  String  @id @default(cuid())
   nume  String
   pret  Float
-  stoc  Int @default(0)
+  stocS    Int    @default(0)
+  stocM    Int    @default(0)
+  stocL    Int    @default(0)
   imagine String?
   categorie String 
   descriere String?
@@ -33,8 +35,7 @@ model Order {
   numeClient String
   email String
   telefon String
-  marimeTricou String?
-  marimePantaloni String?
+  adresa String
   codPostal String
   iteme Json
   total Float
