@@ -1,6 +1,6 @@
 @import 'tw-animate-css';
 
-@import url('/public/SpecterTRIAL-BlackItalic-BF64ed585bd61de.otf');
+@import url('/public/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.otf');
 @import 'tailwindcss';
 
 @config '../../tailwind.config.ts';
