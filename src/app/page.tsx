@@ -188,10 +188,6 @@ export default function Home() {
             />
             {/* WIP: LOOP */}
             <div className="relative z-0 top-0 left-0 w-full h-[100dvh] object-cover aspect-video object-cover aspect-video">
-              {/* <video width="320" height="240" controls>
-      <source src="/videos/beeVideo.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video> */}
               <video
                 ref={videoRef}
                 autoPlay
