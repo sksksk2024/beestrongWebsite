@@ -152,6 +152,14 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
       stocL: 6,
     },
     {
+      id: 'cmdycjcqt00079g80wvm5xnch',
+      nume: 'Compression T-shirt alb',
+      pret: 149.99,
+      stocS: 7,
+      stocM: 12,
+      stocL: 10,
+    },
+    {
         id: 'cmdycjcqt00059g80gyj6ussh',
         nume: 'Honey Jersey',
         pret: 159.99,
@@ -166,14 +174,6 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
       stocS: 4,
       stocM: 6,
       stocL: 4,
-    },
-    {
-        id: 'cmdycjcqt00079g80wvm5xnch',
-        nume: 'Compression T-shirt alb',
-        pret: 149.99,
-      stocS: 7,
-      stocM: 12,
-      stocL: 10,
     },
 ]
 
