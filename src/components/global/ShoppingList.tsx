@@ -89,7 +89,7 @@ const ShoppingList = () => {
               <div className="flex justify-between items-center gap-10">
                 <h3>Pret total: </h3>
                 <span>
-                  <span>{totalGeneral}</span> lei
+                  <span>{Math.round(totalGeneral)}</span> lei
                 </span>
               </div>
             </li>
