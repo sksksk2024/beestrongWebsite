@@ -123,7 +123,7 @@ if (!validation.success) {
           <ul>
             {produse.map((produs, index) => {
               const pretTotal = produs.cantitate * produs.pret;
-              if (produs.cantitate <= 0) return
+              if (produs.cantitate <= 0 || Number.isNaN(produs.cantitate) || Number.isNaN(produs.pret) || isNaN(pretTotal)) return
               return (
                 <React.Fragment key={index}>
                   <li className="underline">
