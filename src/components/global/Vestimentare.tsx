@@ -131,7 +131,10 @@ const [current, setCurrent] = useState(0)
                               type='button' className={`rounded-16BR text-sm text-center py-8P  px-16P font-bold cursor-pointer hover:scale-105
                                 ${marime === s ? 'bg-gray-800 text-yellowCustom' : 'bg-gray-400 text-white'}
                                 `}
-                              >{s} ( {remaining} ramase )</button>
+                              >{s} ( {Number.isNaN(remaining)
+                              ? 'se incarca'
+                            : `${remaining} ramase`
+                            } )</button>
                             )})}
                           </div>
                           <div className="mt-8M">

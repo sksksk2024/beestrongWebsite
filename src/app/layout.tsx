@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="bg-black">
+      <html lang="en" className="bg-black font-specter">
         <head>
         <link
           rel="preconnect"

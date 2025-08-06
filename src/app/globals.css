@@ -1,6 +1,6 @@
 @import 'tw-animate-css';
 
-/* @import url('/fonts/SpecterTRIAL-Black-BF64ed585c11e27.woff'); */
+@import url('/fonts/SpecterTRIAL-Black-BF64ed585c11e27.woff');
 @import 'tailwindcss';
 
 @config '../../tailwind.config.ts';
@@ -12,21 +12,18 @@ img {
 }
 
 @font-face {
-  /* font-family: 'Specter', sans-serif; */
-  /* src: url('/fonts/SpecterTRIAL-Black-BF64ed585c11e27.woff') format('woff'); */
-  font-weight: 900;
-  font-style: italic;
+  font-family: 'Specter';
+  src: url('/fonts/SpecterTRIAL-Black-BF64ed585c11e27.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
   font-display: swap;
 }
 
-*,
+/* *,
 body {
-  /* font-family: 'Specter'; */
-  /* src: url('/fonts/SpecterTRIAL-Black-BF64ed585c11e27.woff') format('woff'); */
-  font-weight: 900;
-  font-style: italic;
-  font-display: swap;
-}
+  font-family: 'Specter, sans-serif';
+  src: url('/fonts/SpecterTRIAL-Black-BF64ed585c11e27.woff') format('woff');
+} */
 h1, h2, p, a, span, li, h3, div { color: #c6c63b }
 /* color: rgb(198, 198, 59); */
 

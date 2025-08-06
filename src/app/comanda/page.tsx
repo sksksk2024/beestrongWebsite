@@ -155,7 +155,7 @@ if (!validation.success) {
             })}
             <li className="underline">
               <div className="flex justify-between items-center gap-10">
-                Acceptam doar bani cash
+                Plata se face cash la livrare
               </div>
             </li>
             <hr className="bg-gray-400 h-1 w-full my-[1rem]" />

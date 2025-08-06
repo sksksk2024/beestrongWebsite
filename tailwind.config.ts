@@ -16,6 +16,7 @@ module.exports = {
         },
       },
       fontFamily: {
+        specter: ['Specter', 'sans-serif'],
         'open-sans': ['Open Sans', 'sans-serif'],
         raleway: ['Raleway', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],

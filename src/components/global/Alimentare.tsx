@@ -89,7 +89,9 @@ const Alimentare = ({ images, nume, pret, idProdus }: AlimentareType) => {
             onClick={() => setStoc(!stoc)}
             className="px-32P text-xl absolute -top-[100px] w-full h-1/2 z-50 duration-300 group-hover:scale-106 font-bold bg-gray-800/60 rounded-t-16BR px-16P py-8P">
             <div className="">
-              Stoc: {availableStock - currentQuantity} ramase
+              Stoc: {Number.isNaN(availableStock - currentQuantity) ? 
+            'se incarca' : `${availableStock - currentQuantity} ramase`  
+            }
             </div>
             <div className="">
               Cost: {pret} lei
