@@ -1,6 +1,6 @@
 @import 'tw-animate-css';
 
-@import url('/public/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.woff');
+@import url('/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.woff');
 @import 'tailwindcss';
 
 @config '../../tailwind.config.ts';
@@ -13,7 +13,7 @@ img {
 
 @font-face {
   font-family: 'Specter';
-  src: url('/public/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.woff') format('woff');
+  src: url('/fonts/SpecterTRIAL-BlackItalic-BF64ed585bd61de.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
