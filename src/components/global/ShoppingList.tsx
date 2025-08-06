@@ -89,7 +89,9 @@ const ShoppingList = () => {
               <div className="flex justify-between items-center gap-10">
                 <h3>Pret total: </h3>
                 <span>
-                  <span>{totalGeneral.toFixed(2)}</span> lei
+                  <span>
+                  {Number.isNaN(totalGeneral) ? 'dai refresh' : `${totalGeneral.toFixed(2)}`}
+                    </span> {!Number.isNaN(totalGeneral) && 'lei'}
                 </span>
               </div>
             </li>
