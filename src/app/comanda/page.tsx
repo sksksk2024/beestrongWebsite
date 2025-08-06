@@ -128,7 +128,7 @@ if (!validation.success) {
               return (
                 <React.Fragment key={index}>
                   <li className="underline">
-                    <div className="flex justify-around items-center gap-10">
+                    <div className="flex justify-around items-center gap-2 sm:gap-10">
                       <Image
                         className="w-10 h-10 bg-black z-50 rounded-full"
                         src={
@@ -159,10 +159,14 @@ onClick={() => stergeProdus(produs.id)}
                 </React.Fragment>
               );
             })}
-            <li className="underline">
-              <div className="flex justify-between items-center gap-10">
+            <li className="flex justify-between items-center gap-10">
+              <div className="underline">
                 Plata se face cash la livrare
               </div>
+              <button
+              onClick={() => golesteLista()}
+              id='important2'
+              className="cursor-pointer hover:scale-105 no-underline">Goleste Cos</button>
             </li>
             <hr className="bg-gray-400 h-1 w-full my-[1rem]" />
             <li className="underline">
