@@ -52,10 +52,19 @@ const Footer = () => {
         <span>george.beestrong@gmail.com</span>
       </Link>
 
-      <div className="w-full flex flex-col md:flex-row md:justify-start items-center gap-5 md:gap-10 mb-32M">
+      <div className="w-full flex flex-col md:flex-row md:justify-start items-center gap-5 md:gap-10">
+        <Link href='https://anpc.ro/' target="_blank">
         <Image className="w-128W" src={anpc} alt="ANPC" />
+        </Link>
+        <Link href='https://www.anaf.ro' target="_blank">
         <Image className="w-128W" src={anaf} alt="ANAF" />
+        </Link>
       </div>
+
+      <p className='text-sm mb-32M max-w-container-400 text-center md:text-start'>
+        &copy; {new Date().getFullYear()} Beestrong |{' '}
+        Toate drepturile rezervate
+      </p>
     </footer>
   );
 };
