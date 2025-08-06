@@ -2,13 +2,15 @@ import AnimatedSVG from './AnimatedSVG';
 
 type MenuProps = {
   className?: string;
+  height?: number
+  width?: number
 };
 
-const XMenu = ({ className }: MenuProps) => {
+const XMenu = ({ className, width = 40, height = 30 }: MenuProps) => {
   return (
     <AnimatedSVG
-      width={40}
-      height={30}
+      width={width}
+      height={height}
       strokeWidth={6}
       stroke="currentColor"
       fill="currentColor" // Added this to make the fill color consistent with the stroke color

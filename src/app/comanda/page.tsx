@@ -8,6 +8,7 @@ import { OrderSchema } from '@/lib/schemas';
 import PageWrapper from '@/components/contexts/PageWrapper';
 import Image from 'next/image';
 import { useProductListStore } from '@/components/hooks/productListStore';
+import XMenu from '@/components/utils/XMenu';
 
 type InvalidProduct = {
   nume?: string;
@@ -17,7 +18,7 @@ type InvalidProduct = {
 
 const Page = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const { produse, golesteLista } = useProductListStore();
+  const { produse, golesteLista, stergeProdus } = useProductListStore();
   let totalGeneral = produse.reduce(
     (total, produs) => total + produs.cantitate * produs.pret,
     0
@@ -139,7 +140,7 @@ if (!validation.success) {
                         height={100}
                         alt={produs.nume}
                       />
-                      <h3>{produs.nume}</h3>
+                      <h3>{produs.nume}{produs.marime && `( ${produs?.marime} )`}</h3>
                       <p>
                         Pret{' '}
                         <span>
@@ -147,6 +148,11 @@ if (!validation.success) {
                         </span>{' '}
                         lei
                       </p>
+<button type="button"
+onClick={() => stergeProdus(produs.id)}
+>
+  <XMenu width={16} height={16} />
+</button>
                     </div>
                   </li>
                   <hr className="bg-gray-400 h-1 w-full my-[1rem]" />
@@ -163,7 +169,11 @@ if (!validation.success) {
               <div className="flex justify-between items-center gap-10">
                 <h3>Pret total + 20 de lei transport: </h3>
                 <p>
-                  <span>{totalGeneral}</span> lei
+                  <span>
+                    {Number.isNaN(totalGeneral)
+                              ? 'dai refresh'
+                            : `${totalGeneral.toFixed(2)}`}
+                    </span> {!Number.isNaN(totalGeneral) && 'lei'}
                 </p>
               </div>
             </li>
