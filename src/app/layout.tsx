@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="bg-black font-specter">
+      <html lang="en" className="bg-black font-title">
         <head>
         <link
           rel="preconnect"
@@ -28,7 +28,7 @@ export default function RootLayout({
         <link rel="icon" href="/beestrongIcon.svg" sizes="32x32" />
         <link rel="apple-touch-icon" href="/beestrongIcon.svg" sizes="32x32" />
       </head>
-        <body className={`antialiased`}>
+        <body className={`antialiased font-specter`}>
           <AudioProvider>
             {children}
             <Toaster />
