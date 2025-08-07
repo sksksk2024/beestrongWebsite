@@ -189,9 +189,11 @@ export default function Home() {
             {/* WIP: LOOP */}
             <div className="relative z-0 top-0 left-0 w-full h-[100dvh] object-cover aspect-video object-cover aspect-video">
               <video
+                preload="metadata"
                 ref={videoRef}
                 autoPlay
                 muted
+                width="100%"
                 loop
                 playsInline
                 className="absolute top-0 left-0 w-full h-full object-cover"
