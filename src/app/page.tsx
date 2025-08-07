@@ -200,7 +200,7 @@ export default function Home() {
               >
                 <source
                   className="relative z-0"
-                  src="/videos/beeVideo.mp4"
+                  src="/videos/beeVideo2.mp4"
                   type="video/mp4"
                 />
                 Browser-ul tău nu suportă tag-ul video.
