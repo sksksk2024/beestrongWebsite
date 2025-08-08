@@ -25,8 +25,6 @@ const Tricou = ({ images, nume, pret,
 
   const [stoc, setStoc] = useState(false);
   const [, setIsHovered] = useState(false);
-  const [, setLoading] = useState(true);
-  const [, setError] = useState<string | null>(null);
 
   const { stergeProdus, modificaCantitate, adaugaProdus, produse } = useProductListStore();
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Minus from '../utils/Minus';
 import Plus from '../utils/Plus';
 import { Card, CardContent } from '../ui/card';
@@ -21,8 +21,6 @@ type AlimentareType = {
 const Alimentare = ({ images, nume, pret, idProdus, availableStock }: AlimentareType) => {
     const [stoc, setStoc] = useState(false);
     const [, setIsHovered] = useState(false);
-    const [, setLoading] = useState(true);
-    const [, setError] = useState<string | null>(null);
   const { modificaCantitate, stergeProdus, adaugaProdus, produse } =
     useProductListStore();
 
