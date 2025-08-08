@@ -1,15 +1,23 @@
 // hooks/useProductStock.ts
-// @typescript-eslint/no-explicit-any
+//  @typescript-eslint/no-explicit-any
 'use client'
 
 import { useEffect } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import type { RealtimePostgresInsertPayload } from "@supabase/supabase-js"
+import { StockMap } from "../utils/types"
 
-type StockMap = {
-    S: number
-    M: number
-    L: number
+type ProductRow = {
+    id: string
+    nume: string
+    pret: number
+    imagine: string
+    categorie: string
+    descriere: string
+    createdAt: string // or Date if you parse it
+    stocS: number
+    stocM: number
+    stocL: number
 }
 
 type Callback = (productId: string, stock: StockMap) => void
@@ -30,8 +38,7 @@ export function useProductStock(
                         table: 'Product',
                         filter: `id=eq.${id}`,
                     },
-                    (payload: RealtimePostgresInsertPayload<any>) => {
-                        console.log(payload)
+                    (payload: RealtimePostgresInsertPayload<ProductRow>) => {
                         const newStock = {
                             S: payload.new.stocS,
                             M: payload.new.stocM,
