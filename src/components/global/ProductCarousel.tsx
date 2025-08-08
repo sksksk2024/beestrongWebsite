@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -24,8 +24,6 @@ type carouselProps = {
   isVestimentareModal: boolean;
   handleAlimenteModal: (isOpen: boolean) => void;
   handleVestimentareModal: (isOpen: boolean) => void;
-  vestimentareIds: string[];
-  alimentareIds: string[];
   vestStocks: Record<string, StockMap>;
   alimStocks: Record<string, StockMap>;
 };
@@ -35,8 +33,6 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
     {
       isAlimenteModal,
       isVestimentareModal,
-      vestimentareIds,
-      alimentareIds,
       vestStocks,
       alimStocks,
       handleAlimenteModal,
@@ -44,12 +40,6 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
     },
     ref
   ) => {
-    // Build a list of just the IDs
-    // const [vestStocks, setVestStocks] = useState<Record<string, StockMap>>({});
-    // const [alimStocks, setAlimStocks] = useState<Record<string, StockMap>>({});
-
-    // useEffect
-
     return (
       <section
         ref={ref}

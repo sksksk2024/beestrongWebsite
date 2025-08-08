@@ -312,8 +312,6 @@ export default function Home() {
                 ref={carouselRef}
                 isAlimenteModal={isAlimenteModal}
                 isVestimentareModal={isVestimentareModal}
-                vestimentareIds={vestimentareIds}
-                alimentareIds={alimentareIds}
                 vestStocks={vestStocks}
                 alimStocks={alimStocks}
                 handleAlimenteModal={handleAlimenteModal}

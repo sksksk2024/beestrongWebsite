@@ -14,7 +14,6 @@ type TricouType = {
   nume: string;
   pret: number;
   idProdus: string;
-  // marime?: MarimeType
   stockMap: { S: number; M: number; L: number };
 };
 

@@ -91,11 +91,10 @@ const Page = () => {
           const failedIds = responseData.invalidProducts.map(
             (p: InvalidProduct) => p.productId
           );
-          console.log(failedIds);
 
-          failedIds.forEach((id: any) => golesteLista());
+          failedIds.forEach(() => golesteLista());
 
-          const errorDetails = responseData.invalidProducts
+          responseData.invalidProducts
             .map((p: InvalidProduct) => `${p.error}`)
             .join("\n");
           throw new Error(`Aveti produse care nu mai sunt in stoc`);

@@ -1,4 +1,5 @@
 // hooks/useProductStock.ts
+/* @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useEffect } from "react"
@@ -49,5 +50,5 @@ export function useProductStock(
                 supabase.removeChannel(ch)
             })
         }
-    }, [productIds.join(',')]) // Depend on joined string to re-sub only when IDs change
+    }, [productIds.join(','), onStockUpdate, productIds]) // Depend on joined string to re-sub only when IDs change
 }
