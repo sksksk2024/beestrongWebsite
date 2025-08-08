@@ -1,5 +1,5 @@
 // hooks/useProductStock.ts
-/* @typescript-eslint/no-explicit-any */
+// @typescript-eslint/no-explicit-any
 'use client'
 
 import { useEffect } from "react"
