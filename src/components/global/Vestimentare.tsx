@@ -90,7 +90,7 @@ const [current, setCurrent] = useState(0)
                           <h3 className='mb-8M'>Stocuri:</h3>
                           <div className="flex flex-col gap-1 sm:gap-4 w-full text-black">
                             {(['S','M','L'] as MarimeType[]).map(s => {
-                              const sizeQuantity = produse.find(p => p.id === `${idProdus}-${s}`)?.cantitate || 0;
+                              const sizeQuantity = produse.find(p => p.id === `${idProdus}-${s}`)?.cantitate || null;
                               let remaining: number | null = null;
 
 if (typeof sizeQuantity === 'number' && typeof stockMap[s] === 'number') {

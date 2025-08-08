@@ -46,12 +46,11 @@ const Alimentare = ({ images, nume, pret, idProdus, availableStock }: Alimentare
 
   
   const produs = produse.find(p => p.id === idProdus);
-  const currentQuantity = produs?.cantitate || 0;
-
+  const currentQuantity = produs?.cantitate ?? 0;;
   let remaining: number | null = null;
 
 if (typeof availableStock === 'number' && typeof currentQuantity === 'number') {
-  remaining = availableStock - currentQuantity;
+  remaining = Math.max(availableStock - currentQuantity, 0);
 }
 
     const canAddMore = currentQuantity < availableStock
