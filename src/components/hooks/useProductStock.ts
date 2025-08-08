@@ -1,5 +1,4 @@
 // hooks/useProductStock.ts
-//  @typescript-eslint/no-explicit-any
 'use client'
 
 import { useEffect } from "react"
@@ -31,6 +30,7 @@ export function useProductStock(
             const channel = supabase
                 .channel(`product_${id}`)
                 .on(
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     'postgres_changes' as any,
                     {
                         event: '*',
