@@ -1,26 +1,32 @@
-'use client';
-import { useEffect, useRef, useState } from 'react';
-import Header from '@/components/global/Header';
-import { Card } from '@/components/ui/card';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { buttonVariants } from '@/components/motionVariants/motionVariants';
-import ProductCarousel from '@/components/global/ProductCarousel';
-import PageWrapper from '@/components/contexts/PageWrapper';
-import Footer from '@/components/global/Footer';
-import Benefits from '@/components/global/Benefits';
-import Food1 from '@/../public/alimentara1.png';
-import Tricou1 from '@/../public/banner.jpg';
-import ShoppingList from '@/components/global/ShoppingList';
-import Link from 'next/link';
-import XMenu from '@/components/utils/XMenu';
-import { SignOutButton, useUser } from '@clerk/nextjs';
+"use client";
+import { useEffect, useRef, useState } from "react";
+import Header from "@/components/global/Header";
+import { Card } from "@/components/ui/card";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { buttonVariants } from "@/components/motionVariants/motionVariants";
+import ProductCarousel from "@/components/global/ProductCarousel";
+import PageWrapper from "@/components/contexts/PageWrapper";
+import Footer from "@/components/global/Footer";
+import Benefits from "@/components/global/Benefits";
+import Food1 from "@/../public/alimentara1.png";
+import Tricou1 from "@/../public/banner.jpg";
+import ShoppingList from "@/components/global/ShoppingList";
+import Link from "next/link";
+import XMenu from "@/components/utils/XMenu";
+import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useProductStock } from "@/components/hooks/useProductStock";
+import { StockMap } from "@/components/utils/types";
+import {
+  produseAlimentare,
+  produseVestimentare,
+} from "@/components/utils/StaticImages";
 
 export default function Home() {
   const { user } = useUser();
   const isAdmin = user?.organizationMemberships?.some((m) => {
-    const orgMatches = m.organization.slug?.includes('admins'); // More flexible matching
-    const roleMatches = m.role === 'org:admin';
+    const orgMatches = m.organization.slug?.includes("admins"); // More flexible matching
+    const roleMatches = m.role === "org:admin";
     return orgMatches && roleMatches;
   });
 
@@ -37,8 +43,8 @@ export default function Home() {
     if (isAlimenteModal || isVestimentareModal) {
       setTimeout(() => {
         carouselRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
+          behavior: "smooth",
+          block: "center",
         });
       }, 100);
     }
@@ -46,13 +52,13 @@ export default function Home() {
 
   useEffect(() => {
     if (isMenuOpen || isAlimenteModal || isVestimentareModal) {
-      document.body.classList.add('bodyClass');
+      document.body.classList.add("bodyClass");
     } else {
-      document.body.classList.remove('bodyClass');
+      document.body.classList.remove("bodyClass");
     }
 
     // Clean up on unmount
-    return () => document.body.classList.remove('bodyClass');
+    return () => document.body.classList.remove("bodyClass");
   }, [isMenuOpen, isAlimenteModal, isVestimentareModal]);
 
   const handleVestimentareModal = () => {
@@ -73,10 +79,98 @@ export default function Home() {
     // Asigură-te că video-ul se încarcă corect
     if (videoRef.current) {
       videoRef.current.play().catch((error) => {
-        console.error('Auto-play prevented:', error);
+        console.error("Auto-play prevented:", error);
       });
     }
   }, []);
+
+  const vestimentareIds = produseVestimentare.map((p) => p.id);
+  const alimentareIds = produseAlimentare.map((p) => p.id);
+
+  const [vestStocks, setVestStocks] = useState<Record<string, StockMap>>({});
+  const [alimStocks, setAlimStocks] = useState<Record<string, StockMap>>({});
+
+  useProductStock(
+    [...vestimentareIds, ...alimentareIds],
+    (productId, stock) => {
+      setVestStocks((prev) => {
+        if (vestimentareIds.includes(productId)) {
+          return { ...prev, [productId]: stock };
+        }
+        return prev;
+      });
+
+      setAlimStocks((prev) => {
+        if (alimentareIds.includes(productId)) {
+          return { ...prev, [productId]: stock };
+        }
+        return prev;
+      });
+    }
+  );
+
+  useEffect(() => {
+    // combine the two arrays of IDs into one
+    const allIds = [...vestimentareIds, ...alimentareIds];
+    if (!allIds.length) return;
+
+    const query = allIds.map((id) => `id=${encodeURIComponent(id)}`).join("&");
+
+    const fetchData = () => {
+      fetch(`/api/produse?${query}`)
+        .then((res) => res.json())
+        .then((data) => {
+          // normalize to an array
+          const list = Array.isArray(data) ? data : [data];
+
+          // build two separate maps
+          const vestMap = {} as Record<string, StockMap>;
+          const alimMap = {} as Record<string, StockMap>;
+
+          list.forEach((p) => {
+            const stock = { S: p.stocS, M: p.stocM, L: p.stocL };
+            if (vestimentareIds.includes(p.id)) {
+              vestMap[p.id] = stock;
+            }
+            if (alimentareIds.includes(p.id)) {
+              alimMap[p.id] = stock;
+            }
+          });
+
+          setVestStocks(vestMap);
+          setAlimStocks(alimMap);
+        })
+        .catch(console.error);
+    };
+
+    // Broadcast updates to other tabs
+    const channel = new BroadcastChannel("stock-sync");
+    fetchData(); // initial fetch
+    const interval = setInterval(() => {
+      fetchData();
+      channel.postMessage("update"); // broadcast an update
+    }, 5000);
+
+    channel.onmessage = (event) => {
+      console.log("[Other tab] Message received:", event.data);
+      if (event.data === "update") {
+        fetchData(); // re-fetch if another tab sent a message
+      }
+    };
+
+    // ✅ ADD THIS: listen to updates from other tabs
+    channel.onmessage = (event) => {
+      if (event.data === "update") {
+        console.log("📥 Update received from another tab");
+        fetchData();
+      }
+    };
+
+    return () => {
+      clearInterval(interval);
+      channel.close();
+    };
+  }, [vestimentareIds.join(","), alimentareIds.join(",")]);
 
   return (
     <PageWrapper>
@@ -84,7 +178,7 @@ export default function Home() {
         {/* Overlay that darkens the content when menu is open */}
         <div
           className={`z-20 fixed inset-0 bg-black z-40 transition-opacity duration-300 ${
-            isMenuOpen ? 'opacity-75' : 'opacity-0 pointer-events-none'
+            isMenuOpen ? "opacity-75" : "opacity-0 pointer-events-none"
           }`}
           onClick={toggleMenu}
         />
@@ -92,8 +186,8 @@ export default function Home() {
           <div
             className={`z-30 fixed inset-0 bg-black w-[100dvw] ${
               isAlimenteModal || isVestimentareModal
-                ? 'opacity-75'
-                : 'opacity-0 pointer-events-none'
+                ? "opacity-75"
+                : "opacity-0 pointer-events-none"
             }`}
             onClick={
               isAlimenteModal ? handleAlimenteModal : handleVestimentareModal
@@ -104,7 +198,7 @@ export default function Home() {
         {/* Sliding Menu */}
         <div
           className={`max-w-container-300 text-yellowCustom bg-black fixed top-0 left-0 h-full xs:w-1/4 z-50 transform transition-transform duration-300 ${
-            isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            isMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="p-4">
@@ -174,7 +268,7 @@ export default function Home() {
         {/* Main Content */}
         <section
           className={`text-yellowCustom bg-black flex flex-col gap-[5rem] transition-all duration-300 ${
-            isMenuOpen ? 'blur-sm' : ''
+            isMenuOpen ? "blur-sm" : ""
           }`}
         >
           {/* BG - VIDEO */}
@@ -218,6 +312,10 @@ export default function Home() {
                 ref={carouselRef}
                 isAlimenteModal={isAlimenteModal}
                 isVestimentareModal={isVestimentareModal}
+                vestimentareIds={vestimentareIds}
+                alimentareIds={alimentareIds}
+                vestStocks={vestStocks}
+                alimStocks={alimStocks}
                 handleAlimenteModal={handleAlimenteModal}
                 handleVestimentareModal={handleVestimentareModal}
               />

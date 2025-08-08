@@ -2,6 +2,12 @@
 
 export type MarimeType = 'S' | 'M' | 'L'
 
+export type StockMap = {
+  S: number;
+  M: number;
+  L: number;
+};
+
 export type OrderItem = {
   productId: string;
   nume: string;

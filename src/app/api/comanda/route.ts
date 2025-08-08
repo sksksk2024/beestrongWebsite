@@ -97,11 +97,11 @@ export async function POST(req: Request) {
         if ((prod as any)[key] < item.cantitate) {
           return {
             valid: false,
-            productId: item.productId,
+            // productId: item.productId,
             productName: prod.nume,
             available: (prod as any)[key],
             requested: item.cantitate,
-            error: "Stoc insuficient",
+            error: "stoc insuficient",
           };
         }
         return { valid: true, productId: item.productId };
@@ -191,7 +191,7 @@ export async function POST(req: Request) {
           adresa: orderData.adresa,
           codPostal: orderData.codPostal,
           iteme: orderData.iteme,
-          total: Math.round(orderData * 100) / 100,
+          total: Math.round(orderData.total * 100) / 100,
           status: "Nelivrat",
           produse: {
             connect: orderData.iteme.map((item: any) => ({

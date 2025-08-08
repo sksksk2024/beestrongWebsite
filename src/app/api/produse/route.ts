@@ -4,57 +4,6 @@ import { NextResponse } from "next/server";
 import {prisma} from '@/lib/prisma'
 
 // Get all products
-// export async function GET(req: Request) {
-//    try {
-//     const { searchParams } = new URL(req.url);
-//     const id = searchParams.get('id');
-
-//     if (id) {
-//       const product = await prisma.product.findUnique({
-//         where: { id },
-//   select: {
-//     id: true,
-//     nume: true,
-//     pret: true,
-//     imagine: true,
-//     stocS: true,
-//     stocM: true,
-//     stocL: true,
-//   },
-//       });
-      
-//       if (!product) {
-//         return NextResponse.json(
-//           { error: 'Product not found' },
-//           { status: 404 }
-//         );
-//       }
-      
-//       return NextResponse.json({id: product.id,
-//   nume: product.nume,
-//   imagine: product.imagine,
-//   stocS: product.stocS,
-//   stocM: product.stocM,
-//   stocL: product.stocL,
-//   pret: product.pret});
-//     } else {
-//       // Only make one query based on the need
-//       const products = await prisma.product.findMany({
-//         select: { id: true, nume: true, stocS: true, stocM: true, stocL: true }
-//       });
-//       return NextResponse.json(products);
-//     }
-//   } catch (error) {
-//     console.error('Database error:', error);
-//     return NextResponse.json(
-//       { 
-//         error: 'Database operation failed',
-//         details: error instanceof Error ? error.message : String(error)
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
