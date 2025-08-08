@@ -175,7 +175,7 @@ return tx.product.update({
       adresa: orderData.adresa,
       codPostal: orderData.codPostal,
       iteme: orderData.iteme,
-      total: orderData.total,
+      total: (orderData.total).toFixed(2),
       status: 'Nelivrat',
       produse: {
         connect: orderData.iteme.map((item: any) => ({
@@ -185,22 +185,6 @@ return tx.product.update({
     }
   });
 });
-
-    // Save to DB
-    // const order = await prisma.order.create({
-    //   data: {
-    //     numeClient: orderData.nume,
-    //     email: orderData.email,
-    //     telefon: orderData.telefon,
-    //     marimeTricou: orderData.marimeTricou || 'S',
-    //     marimePantaloni: orderData.marimePantaloni || 'S',
-    //     codPostal: orderData.codPostal,
-    //     iteme: orderData.iteme,
-    //     total: orderData.total,
-    //     status: 'Nelivrat',
-    //   },
-    // });
-    // Format products for email
 
     if (!process.env.SENDGRID_API_KEY) {
   return NextResponse.json({ error: 'Missing SENDGRID_API_KEY' }, { status: 500 });
@@ -212,7 +196,7 @@ return tx.product.update({
         <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
           <h3 style="margin: 0; color: #333;">${product.nume}${product.marime ? `(${product.marime})` : ''}</h3>
           <p style="margin: 5px 0; color: #666;">
-            Cantitate: ${product.cantitate} × ${product.pret} RON = ${product.cantitate * product.pret} RON
+            Cantitate: ${product.cantitate} × ${product.pret} RON = ${(product.cantitate * product.pret).toFixed(2)} RON
           </p>
         </div>
       `
@@ -242,7 +226,7 @@ return tx.product.update({
           ${productsHtml}
           
           <div style="margin-top: 20px; font-size: 1.2em;">
-            <strong>Total: ${orderData.total} RON</strong>
+            <strong>Total: ${(orderData.total).toFixed(2)} RON</strong>
           </div>
           
           <p style="margin-top: 30px; font-size: 0.9em; color: #718096;">
@@ -269,7 +253,7 @@ return tx.product.update({
             ${productsHtml}
             
             <div style="margin-top: 15px; font-size: 1.2em;">
-              <strong>Total: ${orderData.total} RON</strong>
+              <strong>Total: ${(orderData.total).toFixed(2)} RON</strong>
             </div>
           </div>
           

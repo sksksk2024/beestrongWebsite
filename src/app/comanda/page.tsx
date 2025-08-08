@@ -123,8 +123,8 @@ if (!validation.success) {
           {itemsInCart.length === 0 ? 'Cosul este gol' : (
           <ul>
             {produse.map((produs, index) => {
-              const pretTotal = produs.cantitate * produs.pret;
-              if (produs.cantitate <= 0 || Number.isNaN(produs.cantitate) || Number.isNaN(produs.pret) || isNaN(pretTotal)) return
+              const pretTotal = (produs.cantitate * produs.pret).toFixed(2);
+              if (produs.cantitate <= 0 || Number.isNaN(produs.cantitate) || Number.isNaN(produs.pret)) return
               return (
                 <React.Fragment key={index}>
                   <li className="underline">

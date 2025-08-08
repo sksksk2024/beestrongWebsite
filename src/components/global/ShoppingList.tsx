@@ -51,7 +51,7 @@ const ShoppingList = () => {
       !Number.isNaN(produs.pret)
   )
             .map((produs) => {
-              const pretTotal = produs.cantitate * produs.pret;
+              const pretTotal = (produs.cantitate * produs.pret).toFixed(2);
               if (produs.cantitate === 0) return
               return (
                 <React.Fragment key={produs.id}>
@@ -75,7 +75,7 @@ const ShoppingList = () => {
                       <h3>
                         Pret{' '}
                         <span>
-                          {produs.cantitate} * {produs.pret} = {pretTotal.toFixed(2)}
+                          {produs.cantitate} * {produs.pret} = {pretTotal}
                         </span>{' '}
                         lei
                       </h3>

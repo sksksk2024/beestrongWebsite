@@ -224,7 +224,7 @@ const AdminPanel = () => {
               </h3>
               <ul>
                 {selectedOrder.iteme.map((item: any, index: number) => {
-                  const pretTotal = item.cantitate * item.pret;
+                  const pretTotal = (item.cantitate * item.pret).toFixed(2);
                   return (
                     <React.Fragment key={index}>
                       <li className="underline">
