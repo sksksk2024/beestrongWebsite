@@ -48,7 +48,12 @@ const Alimentare = ({ images, nume, pret, idProdus, availableStock }: Alimentare
   const produs = produse.find(p => p.id === idProdus);
   const currentQuantity = produs?.cantitate || 0;
 
-  const remaining = availableStock - currentQuantity
+  let remaining: number | null = null;
+
+if (typeof availableStock === 'number' && typeof currentQuantity === 'number') {
+  remaining = availableStock - currentQuantity;
+}
+
     const canAddMore = currentQuantity < availableStock
 
   const handleModifyQuantity = (change: number) => {
@@ -91,8 +96,9 @@ const Alimentare = ({ images, nume, pret, idProdus, availableStock }: Alimentare
             onClick={() => setStoc(!stoc)}
             className="px-32P text-xl absolute -top-[100px] w-full h-1/2 z-50 duration-300 group-hover:scale-106 font-bold bg-gray-800/60 rounded-t-16BR px-16P py-8P">
             <div className="">
-              Stoc: {Number.isNaN(remaining) ? 
-            'se incarca' : `${remaining} ramase`  
+              Stoc: {remaining === null ? 
+            'se incarca' : remaining === 0 ? 'epuizat' :
+             `${remaining} ramase`  
             }
             </div>
             <div className="">

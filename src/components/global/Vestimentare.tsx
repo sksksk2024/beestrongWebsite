@@ -28,54 +28,6 @@ const Tricou = ({ images, nume, pret,
 
   const { stergeProdus, modificaCantitate, adaugaProdus, produse } = useProductListStore();
 
-  // Fetch product stock on component mount
-//   useEffect(() => {
-//   async function load() {
-//     setLoading(true);
-//     try {
-//       const res = await fetch(`/api/produse?id=${idProdus}`);
-//       const p = await res.json();
-//       setStockMap({
-//         S: p.stocS,
-//         M: p.stocM,
-//         L: p.stocL
-//       });
-//     } catch (err) {
-//       console.error(err);
-//       setError('Failed to load stock');
-//       setStockMap({
-//         S: 0,
-//         M: 0,
-//         L: 0
-//       });
-//     } finally {
-//       setLoading(false);
-//     }
-//   }
-//   load();
-// }, [idProdus, marime]);
-
-// useEffect(() => {
-//   async function load() {
-//     setLoading(true);
-//     try {
-//       const res = await fetch(`/api/produse?id=${idProdus}`);
-//       const { stocS, stocM, stocL } = await res.json();
-//       setStockMap({ S: stocS, M: stocM, L: stocL });
-//     } catch (err) { 
-//       console.error(err);
-//       setError('Failed to load stock');
-//       setStockMap({
-//         S: 0,
-//         M: 0,
-//         L: 0
-//       });
-//      }
-//     finally { setLoading(false) }
-//   }
-//   load();
-// }, [idProdus]);
-
 const [current, setCurrent] = useState(0)
 
   // every 5 seconds advance to the next image (wrap around)
@@ -139,7 +91,12 @@ const [current, setCurrent] = useState(0)
                           <div className="flex flex-col gap-1 sm:gap-4 w-full text-black">
                             {(['S','M','L'] as MarimeType[]).map(s => {
                               const sizeQuantity = produse.find(p => p.id === `${idProdus}-${s}`)?.cantitate || 0;
-                              const remaining = stockMap[s] - sizeQuantity;
+                              let remaining: number | null = null;
+
+if (typeof sizeQuantity === 'number' && typeof stockMap[s] === 'number') {
+  remaining = stockMap[s] - sizeQuantity;
+}
+
                               return (
                               <button 
                               onClick={() => {
@@ -151,9 +108,9 @@ const [current, setCurrent] = useState(0)
                               type='button' className={`rounded-16BR text-sm text-center py-8P  px-16P font-bold cursor-pointer hover:scale-105
                                 ${marime === s ? 'bg-gray-800 text-yellowCustom' : 'bg-gray-400 text-white'}
                                 `}
-                              >{s} ( {Number.isNaN(remaining)
+                              >{s} ( {remaining === null
                               ? 'se incarca'
-                            : `${remaining} ramase`
+                            : remaining === 0 ? 'epuizat' : `${remaining} ramase`
                             } )</button>
                             )})}
                           </div>
