@@ -41,6 +41,5 @@ export const buttonVariants: Variants = {
       duration: 0.3,
       ease: 'easeInOut',
     },
-    transformOrigin: 'left end',
   },
-};
+}

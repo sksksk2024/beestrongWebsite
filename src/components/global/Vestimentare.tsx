@@ -14,18 +14,15 @@ type TricouType = {
   nume: string;
   pret: number;
   idProdus: string;
-  marime?: MarimeType
+  // marime?: MarimeType
+  stockMap: { S:number; M:number; L:number }
 };
 
 const Tricou = ({ images, nume, pret, 
-  idProdus
+  idProdus, stockMap
  }: TricouType) => {
   const [marime, setMarime] = useState<MarimeType>('S');
-  const [stockMap, setStockMap] = useState<Record<MarimeType, number>>({
-  S: 0,
-  M: 0,
-  L: 0
-});
+
   const [stoc, setStoc] = useState(false);
   const [, setIsHovered] = useState(false);
   const [, setLoading] = useState(true);
@@ -34,31 +31,52 @@ const Tricou = ({ images, nume, pret,
   const { stergeProdus, modificaCantitate, adaugaProdus, produse } = useProductListStore();
 
   // Fetch product stock on component mount
-  useEffect(() => {
-  async function load() {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/produse?id=${idProdus}`);
-      const p = await res.json();
-      setStockMap({
-        S: p.stocS,
-        M: p.stocM,
-        L: p.stocL
-      });
-    } catch (err) {
-      console.error(err);
-      setError('Failed to load stock');
-      setStockMap({
-        S: 0,
-        M: 0,
-        L: 0
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
-  load();
-}, [idProdus, marime]);
+//   useEffect(() => {
+//   async function load() {
+//     setLoading(true);
+//     try {
+//       const res = await fetch(`/api/produse?id=${idProdus}`);
+//       const p = await res.json();
+//       setStockMap({
+//         S: p.stocS,
+//         M: p.stocM,
+//         L: p.stocL
+//       });
+//     } catch (err) {
+//       console.error(err);
+//       setError('Failed to load stock');
+//       setStockMap({
+//         S: 0,
+//         M: 0,
+//         L: 0
+//       });
+//     } finally {
+//       setLoading(false);
+//     }
+//   }
+//   load();
+// }, [idProdus, marime]);
+
+// useEffect(() => {
+//   async function load() {
+//     setLoading(true);
+//     try {
+//       const res = await fetch(`/api/produse?id=${idProdus}`);
+//       const { stocS, stocM, stocL } = await res.json();
+//       setStockMap({ S: stocS, M: stocM, L: stocL });
+//     } catch (err) { 
+//       console.error(err);
+//       setError('Failed to load stock');
+//       setStockMap({
+//         S: 0,
+//         M: 0,
+//         L: 0
+//       });
+//      }
+//     finally { setLoading(false) }
+//   }
+//   load();
+// }, [idProdus]);
 
 const [current, setCurrent] = useState(0)
 
@@ -72,7 +90,11 @@ const [current, setCurrent] = useState(0)
   
   const uniqueId = `${idProdus}-${marime}`;
   const produs = produse.find(p => p.id === uniqueId);
+
+  // remaining stock for this size
   const currentQuantity = produs?.cantitate || 0;
+  // const remaining = stockMap[marime] - currentQuantity
+
   const handleModifyQuantity = (change: number) => {
    const newQuantity = currentQuantity + change;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import {
   Carousel,
   CarouselContent,
@@ -66,6 +66,12 @@ type carouselProps = {
   handleAlimenteModal: (isAlimenteModal: boolean) => void;
   handleVestimentareModal: (isVestimentareModal: boolean) => void;
 };
+
+type StockMap = {
+  S: number
+  M: number
+  L: number
+}
 
 const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
   (
@@ -214,6 +220,46 @@ const produseAlimentare = [
     // },
 ]
 
+// Build a list of just the IDs
+  const vestimentareIds = produseVestimentare.map(p => p.id)
+const alimentareIds    = produseAlimentare.map(p => p.id)
+
+const [vestStocks, setVestStocks] = useState<Record<string, StockMap>>({})
+const [alimStocks, setAlimStocks] = useState<Record<string, StockMap>>({})
+
+useEffect(() => {
+  // combine the two arrays of IDs into one
+  const allIds = [...vestimentareIds, ...alimentareIds]
+  if (!allIds.length) return
+
+  const query = allIds.map(id => `id=${encodeURIComponent(id)}`).join('&')
+
+  fetch(`/api/produse?${query}`)
+    .then(res => res.json())
+    .then(data => {
+      // normalize to an array
+      const list = Array.isArray(data) ? data : [data]
+
+      // build two separate maps
+      const vestMap = {} as Record<string, StockMap>
+      const alimMap = {} as Record<string, StockMap>
+
+      list.forEach(p => {
+        const stock = { S: p.stocS, M: p.stocM, L: p.stocL }
+        if (vestimentareIds.includes(p.id)) {
+          vestMap[p.id] = stock
+        }
+        if (alimentareIds.includes(p.id)) {
+          alimMap[p.id] = stock
+        }
+      })
+
+      setVestStocks(vestMap)
+      setAlimStocks(alimMap)
+    })
+    .catch(console.error)
+}, [vestimentareIds.join(','), alimentareIds.join(',')])
+
     return (
       <section
         ref={ref}
@@ -248,13 +294,14 @@ const produseAlimentare = [
           </button>
           {isAlimenteModal && (
             <CarouselContent className="w-[31.25rem] h-[18.75rem]">
-              {produseAlimentare.map((produs, index) => (
+              {produseAlimentare.map((prod, idx) => (
                 <Alimentare
-                  key={produs.id}
-                  images={alimentareImages[index]}
-              nume={produs.nume}
-              pret={produs.pret}
-              idProdus={produs.id}
+                key={prod.id}
+                    images={alimentareImages[idx]}
+  nume={prod.nume}
+  pret={prod.pret}
+  idProdus={prod.id}
+  availableStock={alimStocks[prod.id]?.S ?? 0}
                 />
               ))}
               <QuestionCard />
@@ -262,13 +309,15 @@ const produseAlimentare = [
           )}
           {isVestimentareModal && (
             <CarouselContent className="w-[31.25rem] h-[18.75rem]">
-            {produseVestimentare.map((produs, index) => (
+            {produseVestimentare.map((prod, idx) => (
               <Vestimentare
-              key={produs.id}
-              images={vestimentareImages[index]}
-              nume={produs.nume}
-              pret={produs.pret}
-              idProdus={produs.id} />
+              key={prod.id}
+              images={vestimentareImages[idx]}
+              nume={prod.nume}
+              pret={prod.pret}
+              idProdus={prod.id}
+              stockMap={vestStocks[prod.id] ?? { S:0, M:0, L:0 }}
+              />
                   ))}
                   <QuestionCard />
             </CarouselContent>

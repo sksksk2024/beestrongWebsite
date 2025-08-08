@@ -75,7 +75,7 @@ const ShoppingList = () => {
                       <h3>
                         Pret{' '}
                         <span>
-                          {produs.cantitate} * {produs.pret} = {pretTotal}
+                          {produs.cantitate} * {produs.pret} = {pretTotal.toFixed(2)}
                         </span>{' '}
                         lei
                       </h3>

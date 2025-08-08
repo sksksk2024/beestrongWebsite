@@ -254,7 +254,7 @@ const AdminPanel = () => {
                   <div className="flex justify-between items-center gap-10">
                     <h3>Pret total + Transport: </h3>
                     <p>
-                      <span>{selectedOrder.total}</span> lei
+                      <span>{selectedOrder.total.toFixed(2)}</span> lei
                     </p>
                   </div>
                 </li>

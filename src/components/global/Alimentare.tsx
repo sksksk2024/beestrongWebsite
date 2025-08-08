@@ -15,10 +15,10 @@ type AlimentareType = {
   idProdus: string;
   pret: number;
   marime?: MarimeType
+  availableStock: number;
 };
 
-const Alimentare = ({ images, nume, pret, idProdus }: AlimentareType) => {
-    const [availableStock, setAvailableStock] = useState(0);
+const Alimentare = ({ images, nume, pret, idProdus, availableStock }: AlimentareType) => {
     const [stoc, setStoc] = useState(false);
     const [, setIsHovered] = useState(false);
     const [, setLoading] = useState(true);
@@ -27,27 +27,31 @@ const Alimentare = ({ images, nume, pret, idProdus }: AlimentareType) => {
     useProductListStore();
 
   // Fetch product stock on component mount
-    useEffect(() => {
-    async function load() {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/produse?id=${idProdus}`);
-        // if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const p = await res.json();
-       setAvailableStock(p.stocS);
-      } catch (err) {
-        console.error(err);
-        setError('Failed to load stock');
-        setAvailableStock(0);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, [idProdus]);
+  //   useEffect(() => {
+  //   async function load() {
+  //     setLoading(true);
+  //     try {
+  //       const res = await fetch(`/api/produse?id=${idProdus}`);
+  //       // if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  //       const p = await res.json();
+  //      setAvailableStock(p.stocS);
+  //     } catch (err) {
+  //       console.error(err);
+  //       setError('Failed to load stock');
+  //       setAvailableStock(0);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   load();
+  // }, [idProdus]);
 
+  
   const produs = produse.find(p => p.id === idProdus);
   const currentQuantity = produs?.cantitate || 0;
+
+  const remaining = availableStock - currentQuantity
+    const canAddMore = currentQuantity < availableStock
 
   const handleModifyQuantity = (change: number) => {
      const newQuantity = currentQuantity + change;
@@ -89,8 +93,8 @@ const Alimentare = ({ images, nume, pret, idProdus }: AlimentareType) => {
             onClick={() => setStoc(!stoc)}
             className="px-32P text-xl absolute -top-[100px] w-full h-1/2 z-50 duration-300 group-hover:scale-106 font-bold bg-gray-800/60 rounded-t-16BR px-16P py-8P">
             <div className="">
-              Stoc: {Number.isNaN(availableStock - currentQuantity) ? 
-            'se incarca' : `${availableStock - currentQuantity} ramase`  
+              Stoc: {Number.isNaN(remaining) ? 
+            'se incarca' : `${remaining} ramase`  
             }
             </div>
             <div className="">
@@ -127,6 +131,7 @@ const Alimentare = ({ images, nume, pret, idProdus }: AlimentareType) => {
           />
           <button
             onClick={() => handleModifyQuantity(1)}
+             disabled={!canAddMore}
             className="bg-black h-48H w-48W rounded-16BR"
           >
             <Plus className="pl-[0.6rem]" />
