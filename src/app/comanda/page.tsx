@@ -273,7 +273,7 @@ onClick={() => stergeProdus(produs.id)}
           </motion.button>
           {status.message && (
   <p
-  id='important'
+  id={`${status.error === false ? 'success': 'important'}`}
     className={`text-sm mt-8M ${
       status.error ? 'text-red-500' : 'text-green-500'
     }`}
