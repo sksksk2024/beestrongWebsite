@@ -1,10 +1,10 @@
 // src/app/api/comanda/route.ts
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { NextResponse } from 'next/server';
-import sgMail from '@sendgrid/mail';
+import { NextResponse } from "next/server";
+import sgMail from "@sendgrid/mail";
 import { OrderItem } from "@/components/utils/types";
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
@@ -14,8 +14,8 @@ type Iteme = {
   cantitate: number;
   pret: number;
   imagine: string;
-  tip: 'aliment' | 'vestimentar'
-  marime?: 'S' | 'M' | 'L'
+  tip: "aliment" | "vestimentar";
+  marime?: "S" | "M" | "L";
 };
 
 // UPDATE STATUS OF AN ORDER
@@ -25,7 +25,7 @@ export async function PATCH(req: Request) {
 
     if (!id || !status) {
       return NextResponse.json(
-        { error: 'ID si status sunt obligatorii' },
+        { error: "ID si status sunt obligatorii" },
         { status: 400 }
       );
     }
@@ -37,8 +37,9 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json(updatedOrder);
   } catch (error) {
-    console.error('Actualizare esuata:', error);
-  const message = error instanceof Error ? error.message : 'Unknown server error';
+    console.error("Actualizare esuata:", error);
+    const message =
+      error instanceof Error ? error.message : "Unknown server error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
@@ -47,7 +48,7 @@ export async function PATCH(req: Request) {
 export async function GET() {
   try {
     const orders = await prisma.order.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
     return NextResponse.json(orders);
   } catch (error) {
@@ -63,145 +64,163 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const orderData = await req.json();
-    console.log('📥 /api/comanda payload:', orderData);
+    console.log("📥 /api/comanda payload:", orderData);
 
     // Validate required fields
     if (!orderData.email || !orderData.telefon) {
       return NextResponse.json(
-        { error: 'Email-ul si numarul de telefon sunt obligatorii!' },
+        { error: "Email-ul si numarul de telefon sunt obligatorii!" },
         { status: 400 }
       );
     }
 
     // Verify all products exist and have sufficient stock
-const productIds = orderData.iteme.map((i:any) => i.productId);
-const products    = await prisma.product.findMany({ where: { id: { in: productIds } } });
+    const productIds = orderData.iteme.map((i: any) => i.productId);
+    const products = await prisma.product.findMany({
+      where: { id: { in: productIds } },
+    });
 
-// then build a map for quick lookup:
-const productsMap = Object.fromEntries(products.map(p => [p.id, p]));
+    // then build a map for quick lookup:
+    const productsMap = Object.fromEntries(products.map((p) => [p.id, p]));
 
-const invalidProducts = orderData.iteme.map((item: OrderItem) => {
-  const prod = productsMap[item.productId];
-  if (!prod) {
-    return { valid: false, productId: item.productId, error: 'Produsul nu există' };
-  }
-  const key = `stoc${item.marime ?? 'S'}` as 'stocS' | 'stocM' | 'stocL';
-  if ((prod as any)[key] < item.cantitate) {
-    return { valid: false, productId: item.productId, productName: prod.nume, available: (prod as any)[key], requested: item.cantitate, error: 'Stoc insuficient' };
-  }
-  return { valid: true, productId: item.productId };
-}).filter((v: any) => !v.valid);
+    const invalidProducts = orderData.iteme
+      .map((item: OrderItem) => {
+        const prod = productsMap[item.productId];
+        if (!prod) {
+          return {
+            valid: false,
+            productId: item.productId,
+            error: "Produsul nu există",
+          };
+        }
+        const key = `stoc${item.marime ?? "S"}` as "stocS" | "stocM" | "stocL";
+        if ((prod as any)[key] < item.cantitate) {
+          return {
+            valid: false,
+            productId: item.productId,
+            productName: prod.nume,
+            available: (prod as any)[key],
+            requested: item.cantitate,
+            error: "Stoc insuficient",
+          };
+        }
+        return { valid: true, productId: item.productId };
+      })
+      .filter((v: any) => !v.valid);
 
-if (invalidProducts.length) {
-  return NextResponse.json(
-    { error: 'Produse invalide', invalidProducts },
-    { status: 400 }
-  );
-}
+    if (invalidProducts.length) {
+      return NextResponse.json(
+        { error: "Produse invalide", invalidProducts },
+        { status: 400 }
+      );
+    }
 
     // Create transaction to update stock and create order
-   const result = await prisma.$transaction(async (tx) => {
-  // Get all products at once
-  const products = await tx.product.findMany({
-    where: {
-      id: { in: orderData.iteme.map((i: any) => i.productId) }
-    },
-    select: { id: true, stocS: true, stocM: true, stocL: true, nume: true }
-  });
+    const result = await prisma.$transaction(async (tx) => {
+      // Get all products at once
+      const products = await tx.product.findMany({
+        where: {
+          id: { in: orderData.iteme.map((i: any) => i.productId) },
+        },
+        select: { id: true, stocS: true, stocM: true, stocL: true, nume: true },
+      });
 
-  // Verify all products were found
-  if (products.length !== orderData.iteme.length) {
-const missingIds = orderData.iteme
-  .map((i: any) => i.productId)
-  .filter((id: string) => !products.some(p => p.id === id));
+      // Verify all products were found
+      if (products.length !== orderData.iteme.length) {
+        const missingIds = orderData.iteme
+          .map((i: any) => i.productId)
+          .filter((id: string) => !products.some((p) => p.id === id));
 
-// Throw only if real missing IDs exist:
-if (missingIds.length > 0) {
-  const uniq = Array.from(new Set(missingIds));
-  throw new Error(`Produse lipsă: ${uniq.join(', ')}`);
-}
+        // Throw only if real missing IDs exist:
+        if (missingIds.length > 0) {
+          const uniq = Array.from(new Set(missingIds));
+          throw new Error(`Produse lipsă: ${uniq.join(", ")}`);
+        }
 
-    throw new Error(`Produse lipsă: ${missingIds.join(', ')}`);
-  }
-
-  // Verify stock
-  const outOfStock = products.filter(p => {
-    const item = orderData.iteme.find((i: any) => i.productId === p.id);
-    const key = `stoc${item.marime ?? 'S'}` as 'stocS'|'stocM'|'stocL';
-    return (p as any)[key] < item!.cantitate;
-  });
-
-  if (outOfStock.length > 0) {
-    throw new Error(
-      `Stoc epuizat pentru: ${outOfStock.map(p => p.nume).join(', ')}`
-    );
-  }
-
-  // Update stocks
-  await Promise.all(
-    orderData.iteme.map((item: Iteme) =>{
-      const field = item.marime === 'M'
-  ? 'stocM'
-  : item.marime === 'L'
-    ? 'stocL'
-    : 'stocS';
-
-      const updates = item.tip === 'aliment'
-  ? {
-      stocS: { decrement: item.cantitate },
-      stocM: { decrement: item.cantitate },
-      stocL: { decrement: item.cantitate },
-    }
-  : {
-      // your existing size‐switch logic
-      [field]: { decrement: item.cantitate }
-    };
-
-return tx.product.update({
-  where: { id: item.productId },
-  data: updates
-});
-
-    }
-    )
-  );
-
-  // Create order
-  return await tx.order.create({
-    data: {
-      numeClient: orderData.nume,
-      email: orderData.email,
-      telefon: orderData.telefon,
-      adresa: orderData.adresa,
-      codPostal: orderData.codPostal,
-      iteme: orderData.iteme,
-      total: (orderData.total).toFixed(2),
-      status: 'Nelivrat',
-      produse: {
-        connect: orderData.iteme.map((item: any) => ({
-          id: item.productId
-        }))
+        throw new Error(`Produse lipsă: ${missingIds.join(", ")}`);
       }
-    }
-  });
-});
+
+      // Verify stock
+      const outOfStock = products.filter((p) => {
+        const item = orderData.iteme.find((i: any) => i.productId === p.id);
+        const key = `stoc${item.marime ?? "S"}` as "stocS" | "stocM" | "stocL";
+        return (p as any)[key] < item!.cantitate;
+      });
+
+      if (outOfStock.length > 0) {
+        throw new Error(
+          `Stoc epuizat pentru: ${outOfStock.map((p) => p.nume).join(", ")}`
+        );
+      }
+
+      // Update stocks
+      await Promise.all(
+        orderData.iteme.map((item: Iteme) => {
+          const field =
+            item.marime === "M"
+              ? "stocM"
+              : item.marime === "L"
+                ? "stocL"
+                : "stocS";
+
+          const updates =
+            item.tip === "aliment"
+              ? {
+                  stocS: { decrement: item.cantitate },
+                  stocM: { decrement: item.cantitate },
+                  stocL: { decrement: item.cantitate },
+                }
+              : {
+                  // your existing size‐switch logic
+                  [field]: { decrement: item.cantitate },
+                };
+
+          return tx.product.update({
+            where: { id: item.productId },
+            data: updates,
+          });
+        })
+      );
+
+      // Create order
+      return await tx.order.create({
+        data: {
+          numeClient: orderData.nume,
+          email: orderData.email,
+          telefon: orderData.telefon,
+          adresa: orderData.adresa,
+          codPostal: orderData.codPostal,
+          iteme: orderData.iteme,
+          total: Math.round(orderData * 100) / 100,
+          status: "Nelivrat",
+          produse: {
+            connect: orderData.iteme.map((item: any) => ({
+              id: item.productId,
+            })),
+          },
+        },
+      });
+    });
 
     if (!process.env.SENDGRID_API_KEY) {
-  return NextResponse.json({ error: 'Missing SENDGRID_API_KEY' }, { status: 500 });
-}
+      return NextResponse.json(
+        { error: "Missing SENDGRID_API_KEY" },
+        { status: 500 }
+      );
+    }
 
     const productsHtml = orderData.iteme
       .map(
         (product: any) => `
         <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-          <h3 style="margin: 0; color: #333;">${product.nume}${product.marime ? `(${product.marime})` : ''}</h3>
+          <h3 style="margin: 0; color: #333;">${product.nume}${product.marime ? `(${product.marime})` : ""}</h3>
           <p style="margin: 5px 0; color: #666;">
             Cantitate: ${product.cantitate} × ${product.pret} RON = ${(product.cantitate * product.pret).toFixed(2)} RON
           </p>
         </div>
       `
       )
-      .join('');
+      .join("");
 
     // Send emails
     await sgMail.send({
@@ -215,18 +234,18 @@ return tx.product.update({
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: #f7fafc; padding: 20px; border-radius: 8px;">
             <h3 style="margin-top: 0;">Detalii Client</h3>
-            <p><strong>Nume:</strong> ${orderData.nume || 'Nu exista'}</p>
+            <p><strong>Nume:</strong> ${orderData.nume || "Nu exista"}</p>
             <p><strong>Email:</strong> ${orderData.email}</p>
             <p><strong>Telefon:</strong> ${orderData.telefon}</p>
             <p><strong>Adresă:</strong> ${orderData.adresa}</p>
-            <p><strong>Cod Postal:</strong> ${orderData.codPostal || 'Nu exista'}</p>
+            <p><strong>Cod Postal:</strong> ${orderData.codPostal || "Nu exista"}</p>
           </div>
           
           <h3 style="margin-bottom: 5px;">Produsele Comandate</h3>
           ${productsHtml}
           
           <div style="margin-top: 20px; font-size: 1.2em;">
-            <strong>Total: ${(orderData.total).toFixed(2)} RON</strong>
+            <strong>Total: ${orderData.total.toFixed(2)} RON</strong>
           </div>
           
           <p style="margin-top: 30px; font-size: 0.9em; color: #718096;">
@@ -253,7 +272,7 @@ return tx.product.update({
             ${productsHtml}
             
             <div style="margin-top: 15px; font-size: 1.2em;">
-              <strong>Total: ${(orderData.total).toFixed(2)} RON</strong>
+              <strong>Total: ${orderData.total.toFixed(2)} RON</strong>
             </div>
           </div>
           
@@ -274,8 +293,9 @@ return tx.product.update({
 
     return NextResponse.json({ success: true, orderId: result });
   } catch (error) {
-    console.error('🔥 Comanda POST failed:', error);
-  const message = error instanceof Error ? error.message : 'Unknown server error';
+    console.error("🔥 Comanda POST failed:", error);
+    const message =
+      error instanceof Error ? error.message : "Unknown server error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

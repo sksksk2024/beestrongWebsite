@@ -30,26 +30,6 @@ const Alimentare = ({
   const { modificaCantitate, stergeProdus, adaugaProdus, produse } =
     useProductListStore();
 
-  // Fetch product stock on component mount
-  //   useEffect(() => {
-  //   async function load() {
-  //     setLoading(true);
-  //     try {
-  //       const res = await fetch(`/api/produse?id=${idProdus}`);
-  //       // if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const p = await res.json();
-  //      setAvailableStock(p.stocS);
-  //     } catch (err) {
-  //       console.error(err);
-  //       setError('Failed to load stock');
-  //       setAvailableStock(0);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-  //   load();
-  // }, [idProdus]);
-
   const produs = produse.find((p) => p.id === idProdus);
   const currentQuantity = produs?.cantitate ?? 0;
   let remaining: number | null = null;
