@@ -24,7 +24,7 @@ const Benefits = () => {
       </div>
       <div className="max-w-container-400 flex flex-col justify-center items-center gap-2 text-center bg-white rounded-16BR lg:w-1/3 border-t-4 border-x-2 border-black">
         <Image src={Provenance} className="w-128W py-2" alt="Provenienta" />
-        <div className="bg-black py-8P px-8P max-w-container-300 xs:max-w-container-500 xs:min-w-container-400 lg:min-w-0 w-full rounded-b-16BR">
+        <div className="bg-black py-8P px-8P min-w-container-300 max-w-container-300 xs:max-w-container-500 xs:min-w-container-400 lg:min-w-0 w-full rounded-b-16BR">
         <h4 className="text-xl">Provenienta</h4>
         <p>Miere 100% naturale, de la apicultori</p>
         </div>

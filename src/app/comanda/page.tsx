@@ -114,21 +114,21 @@ if (!validation.success) {
 
   return (
     <PageWrapper>
-      <div className="h-auto flex flex-col justify-center items-center gap-20 bg-black text-yellowCustom py-48P w-full lg:flex-row lg:gap-0 lg:py-0 lg:h-[100dvh]">
+      <div className="overflow-x-clip h-auto flex flex-col justify-center items-center gap-20 bg-black text-yellowCustom py-48P w-full xl:flex-row xl:gap-0 xl:py-0 xl:h-[100dvh]">
         <h1 className="hidden">Pagina de comanda</h1>
         <section className="flex flex-col justify-center items-start gap-2 mx-auto px-32P">
-          <h2 className="text-center text-lg sm:text-2xl lg:text-3xl font-bold mb-16M mx-auto lg:mx-0 lg:text-start">
+          <h2 className="text-lg sm:text-2xl xl:text-3xl font-bold mb-16M mx-auto xl:mx-0 xl:text-start">
             Ce comanzi
           </h2>
           {itemsInCart.length === 0 ? 'Cosul este gol' : (
-          <ul>
+          <ul className='w-full max-w-container-600'>
             {produse.map((produs, index) => {
               const pretTotal = (produs.cantitate * produs.pret).toFixed(2);
               if (produs.cantitate <= 0 || Number.isNaN(produs.cantitate) || Number.isNaN(produs.pret)) return
               return (
                 <React.Fragment key={index}>
                   <li className="underline">
-                    <div className="flex justify-around items-center gap-2 sm:gap-10">
+                    <div className="flex justify-around items-center gap-2 xl:min-w-container-600 sm:gap-10">
                       <Image
                         className="w-10 h-10 bg-black z-50 rounded-full"
                         src={
@@ -185,11 +185,9 @@ onClick={() => stergeProdus(produs.id)}
           )}
         </section>
         <form
-          className={`text-yellowCustom flex flex-col justify-center items-center gap-2 mx-auto
-            
-            `}
+          className={`text-yellowCustom flex flex-col justify-center items-center gap-2 mx-auto min-w-container-300 w-full max-w-container-600 px-32P xl:pr-32P`}
         >
-          <h2 className="f sm:text-2xl lg:text-3xl font-bold text-center font-bold mb-16M">
+          <h2 className="sm:text-2xl xl:text-3xl font-bold text-center font-bold mb-16M">
             Trimite mesaj echipei!
           </h2>
           <input

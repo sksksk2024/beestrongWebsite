@@ -229,7 +229,7 @@ export default function Home() {
               className="relative z-10 w-full max-w-container-400 h-[16.875rem] 2xs:h-[20.625rem] xs:h-400H group overflow-hidden cursor-pointer"
             >
               <Image
-                className="absolute -top-16I object-cover aspect-2/2 rounded-16BR transition-transform duration-300 scale-108 group-hover:scale-110"
+                className="absolute -top-128I 2xs:-top-16I object-cover 2xs:aspect-2/2 rounded-16BR transition-transform duration-300 scale-108 group-hover:scale-110"
                 src={Food1}
                 alt="img"
               />
@@ -245,7 +245,7 @@ export default function Home() {
               className="relative z-10 w-full max-w-container-400 h-[16.875rem] 2xs:h-[20.625rem] xs:h-400H group overflow-hidden cursor-pointer"
             >
               <Image
-                className="absolute -top-48I object-cover aspect-2/2 xs:aspect-1/2 rounded-16BR transition-transform duration-300 group-hover:scale-105"
+                className="absolute -top-48I object-cover aspect-1/2 rounded-16BR transition-transform duration-300 group-hover:scale-105"
                 src={Tricou1}
                 // src={hoveredClothes ? Tricou2 : Tricou1}
                 alt="img"
