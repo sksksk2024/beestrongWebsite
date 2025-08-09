@@ -52,7 +52,7 @@ const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
               ? () => handleAlimenteModal(!isAlimenteModal)
               : () => handleVestimentareModal(!isVestimentareModal)
           }
-          className="absolute -left-0 -inset-y-45 xs:-inset-y-80 lg:-inset-y-20 bg-black w-[200dvw] opacity-100 h-[28.125rem] z-50 lg:h-[20.125rem]"
+          className="absolute -left-0 -inset-y-45 xs:-inset-y-80 lg:-inset-y-46 bg-black w-[200dvw] opacity-100 h-[28.125rem] z-50 lg:h-[26.125rem] overflow-y-auto"
         ></div>
 
         <Carousel

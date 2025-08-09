@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { buttonVariants } from "@/components/motionVariants/motionVariants";
 import ProductCarousel from "@/components/global/ProductCarousel";
+import { Skeleton } from "@/components/ui/skeleton";
 import PageWrapper from "@/components/contexts/PageWrapper";
 import Footer from "@/components/global/Footer";
 import Benefits from "@/components/global/Benefits";
@@ -23,6 +24,7 @@ import {
 } from "@/components/utils/StaticImages";
 
 export default function Home() {
+  const [loading, setLoading] = useState<boolean>(true);
   const { user } = useUser();
   const isAdmin = user?.organizationMemberships?.some((m) => {
     const orgMatches = m.organization.slug?.includes("admins"); // More flexible matching
@@ -110,6 +112,7 @@ export default function Home() {
   );
 
   useEffect(() => {
+    setLoading(true);
     // combine the two arrays of IDs into one
     const allIds = [...vestimentareIds, ...alimentareIds];
     if (!allIds.length) return;
@@ -139,8 +142,15 @@ export default function Home() {
 
           setVestStocks(vestMap);
           setAlimStocks(alimMap);
+          setLoading(false);
         })
-        .catch(console.error);
+        .catch(() => {
+          alert(
+            "Ceva nu a mers bine! Va rugam sa ne scrieti noua ca sa rezolvam problema"
+          );
+          console.error;
+          setLoading(false);
+        });
     };
 
     // Broadcast updates to other tabs
@@ -300,36 +310,43 @@ export default function Home() {
                 Browser-ul tău nu suportă tag-ul video.
               </video>
             </div>
-            <h2 className="relative bottom-52I sm:bottom-64I lg:bottom-75I z-40 text-yellowCustom font-bold bg-black p-16P text-center text-sm sm:text-lg lg:text-2xl">
+            <h2 className="relative bottom-52I sm:bottom-64I lg:bottom-75I z-40 text-yellowCustom font-bold bg-black p-16P text-center text-sm sm:text-xl lg:text-2xl">
               FORTA DIVINA, DIRECT DE LA ALBINA
             </h2>
           </div>
 
           {/* PRODUCTS */}
-          <div className="relative flex flex-col lg:flex-row justify-around items-center gap-10 lg:gap-0 px-[1rem]">
-            {(isVestimentareModal || isAlimenteModal) && (
-              <ProductCarousel
-                ref={carouselRef}
-                isAlimenteModal={isAlimenteModal}
-                isVestimentareModal={isVestimentareModal}
-                vestStocks={vestStocks}
-                alimStocks={alimStocks}
-                handleAlimenteModal={handleAlimenteModal}
-                handleVestimentareModal={handleVestimentareModal}
-              />
-            )}
+          <div className="relative flex flex-col lg:flex-row justify-around items-center gap-10 lg:gap-4 px-[1rem]">
+            {(isVestimentareModal || isAlimenteModal) &&
+              (loading ? (
+                <>
+                  <div className="flex justify-center items-center w-[99dvw] absolute z-50">
+                    <Skeleton className="h-[20rem] w-full bg-gray-500" />
+                  </div>
+                </>
+              ) : (
+                <ProductCarousel
+                  ref={carouselRef}
+                  isAlimenteModal={isAlimenteModal}
+                  isVestimentareModal={isVestimentareModal}
+                  vestStocks={vestStocks}
+                  alimStocks={alimStocks}
+                  handleAlimenteModal={handleAlimenteModal}
+                  handleVestimentareModal={handleVestimentareModal}
+                />
+              ))}
             <Card
               onClick={handleAlimenteModal}
               onMouseEnter={() => setHoveredFood(true)}
               onMouseLeave={() => setHoveredFood(false)}
-              className="relative z-10 w-full max-w-container-400 h-[16.875rem] 2xs:h-[20.625rem] xs:h-400H group overflow-hidden cursor-pointer"
+              className="relative z-10 min-w-container-300 w-full max-w-container-600 aspect-square group overflow-hidden cursor-pointer"
             >
               <Image
-                className="absolute -top-128I 2xs:-top-16I object-cover 2xs:aspect-2/2 rounded-16BR transition-transform duration-300 scale-108 group-hover:scale-110"
+                className="absolute -top-128I 2xs:-top-0 object-cover 2xs:aspect-2/2 rounded-16BR transition-transform duration-300 scale-108 group-hover:scale-110"
                 src={Food1}
                 alt="img"
               />
-              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem]">
+              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem] text-md sm:text-xl">
                 Art Alimentare
               </h3>
             </Card>
@@ -338,15 +355,15 @@ export default function Home() {
               onClick={handleVestimentareModal}
               onMouseEnter={() => setHoveredClothes(true)}
               onMouseLeave={() => setHoveredClothes(false)}
-              className="relative z-10 w-full max-w-container-400 h-[16.875rem] 2xs:h-[20.625rem] xs:h-400H group overflow-hidden cursor-pointer"
+              className="relative z-10 min-w-container-300 w-full max-w-container-600 aspect-square group overflow-hidden cursor-pointer"
             >
               <Image
-                className="absolute -top-48I object-cover aspect-1/2 rounded-16BR transition-transform duration-300 group-hover:scale-105"
+                className="absolute -top-48I object-cover aspect-1/2 rounded-16BR transition-transform duration-300 group-hover:scale-102"
                 src={Tricou1}
                 // src={hoveredClothes ? Tricou2 : Tricou1}
                 alt="img"
               />
-              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem]">
+              <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem] text-md sm:text-xl">
                 Art Vestimentare
               </h3>
             </Card>

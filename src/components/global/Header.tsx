@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { pulsesVariants, svgVariants } from '../motionVariants/motionVariants';
-import BurgerMenu from '../utils/BurgerMenu';
-import ShoppingCart from '../utils/ShoppingCart';
-import Unmute from '../utils/Unmute';
-import Link from 'next/link';
-import Mute from '../utils/Mute';
-import { useAudio } from '../contexts/AudioContext';
-import { useProductListStore } from '../hooks/productListStore';
+import { motion } from "framer-motion";
+import { pulsesVariants, svgVariants } from "../motionVariants/motionVariants";
+import BurgerMenu from "../utils/BurgerMenu";
+import ShoppingCart from "../utils/ShoppingCart";
+import Unmute from "../utils/Unmute";
+import Link from "next/link";
+import Mute from "../utils/Mute";
+import { useAudio } from "../contexts/AudioContext";
+import { useProductListStore } from "../hooks/productListStore";
 
 type HeaderProps = {
   toggleMenu: () => void;
@@ -24,7 +24,7 @@ const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
 
   return (
     <header
-      className={`${className} top-0 z-50 flex justify-between items-center p-[1rem] py-0 w-full bg-black/60`}
+      className={`${className} top-0 z-50 flex justify-between items-center py-0 w-full bg-black/60`}
     >
       <div className="blur w-full absolute inset-0"></div>
       <motion.button
@@ -42,7 +42,7 @@ const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
         {title}
       </h1>
       <div className="flex justify-center items-center">
-        {audio === 'true' && (
+        {audio === "true" && (
           <button
             onClick={toggleAudio}
             className="relative z-50 text-yellowCustom font-bold text-3xl"
@@ -54,13 +54,13 @@ const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
             )}
           </button>
         )}
-        {cart === 'true' && (
+        {cart === "true" && (
           <Link
             href="/comanda"
             className="relative z-50 text-yellowCustom font-bold text-3xl group"
           >
             {/* When visible shopping list */}
-            {produse.some(p => p.cantitate > 0) && (
+            {produse.some((p) => p.cantitate > 0) && (
               <motion.div
                 variants={pulsesVariants}
                 animate="visible"

@@ -100,7 +100,7 @@ const Tricou = ({ images, nume, pret, idProdus, stockMap }: TricouType) => {
                                 `}
                       >
                         {s} ({" "}
-                        {remaining === null || Number.isNaN(remaining)
+                        {remaining === null
                           ? "se incarca"
                           : `${remaining} ramase`}{" "}
                         )

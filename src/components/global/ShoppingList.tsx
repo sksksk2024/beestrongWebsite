@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import React from 'react';
-import Minus from '../utils/Minus';
-import { motion } from 'framer-motion';
-import { useProductListStore } from '../hooks/productListStore';
+import { useState } from "react";
+import Image from "next/image";
+import React from "react";
+import Minus from "../utils/Minus";
+import { motion } from "framer-motion";
+import { useProductListStore } from "../hooks/productListStore";
 
 const ShoppingList = () => {
   const produse = useProductListStore((state) => state.produse);
@@ -14,9 +14,7 @@ const ShoppingList = () => {
 
   const itemsInCart = produse.filter(
     (produs) =>
-      produs.cantitate > 0 &&
-      produs.pret > 0 &&
-      !Number.isNaN(produs.pret)
+      produs.cantitate > 0 && produs.pret > 0 && !Number.isNaN(produs.pret)
   );
 
   const totalGeneral = produse.reduce(
@@ -28,7 +26,7 @@ const ShoppingList = () => {
     setDown(!down);
   };
 
-  const listClass = down ? 'h-64H' : 'h-256H overflow-y-auto';
+  const listClass = down ? "h-64H" : "h-256H overflow-y-auto";
 
   return (
     <section
@@ -44,54 +42,62 @@ const ShoppingList = () => {
         ) : (
           <ul>
             {produse
-            .filter(
-    (produs) =>
-      produs.cantitate > 0 &&
-      produs.pret > 0 &&
-      !Number.isNaN(produs.pret)
-  )
-            .map((produs) => {
-              const pretTotal = (produs.cantitate * produs.pret).toFixed(2);
-              if (produs.cantitate === 0) return
-              return (
-                <React.Fragment key={produs.id}>
-                  <li className="underline">
-                    <div className="flex justify-around items-center gap-10">
-                      <Image
-                        className="w-10 h-10 bg-black z-50 rounded-full"
-                        src={
-                          produs.imagine.startsWith('/')
-                            ? produs.imagine
-                            : `/${produs.imagine}`
-                        }
-                        width={300}
-                        height={300}
-                        alt={produs.nume}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/pantaloni.jpg'; // Fallback
-                        }}
-                      />
-                      <h3>{produs.nume}{produs.tip === 'vestimentar' && `(${produs.marime || 'S'})`}</h3>
-                      <h3>
-                        Pret{' '}
-                        <span>
-                          {produs.cantitate} * {produs.pret} = {pretTotal}
-                        </span>{' '}
-                        lei
-                      </h3>
-                    </div>
-                  </li>
-                  <hr className="bg-gray-400 h-1 w-full my-[1rem]" />
-                </React.Fragment>
-              );
-            })}
+              .filter(
+                (produs) =>
+                  produs.cantitate > 0 &&
+                  produs.pret > 0 &&
+                  !Number.isNaN(produs.pret)
+              )
+              .map((produs) => {
+                const pretTotal = (produs.cantitate * produs.pret).toFixed(2);
+                if (produs.cantitate === 0) return;
+                return (
+                  <React.Fragment key={produs.id}>
+                    <li className="underline">
+                      <div className="flex justify-around items-center gap-10">
+                        <Image
+                          className="w-10 h-10 bg-black z-50 rounded-full"
+                          src={
+                            produs.imagine.startsWith("/")
+                              ? produs.imagine
+                              : `/${produs.imagine}`
+                          }
+                          width={300}
+                          height={300}
+                          alt={produs.nume}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              "/pantaloni.jpg"; // Fallback
+                          }}
+                        />
+                        <h3>
+                          {produs.nume}
+                          {produs.tip === "vestimentar" &&
+                            `(${produs.marime || "S"})`}
+                        </h3>
+                        <h3>
+                          Pret{" "}
+                          <span>
+                            {produs.cantitate} * {produs.pret} = {pretTotal}
+                          </span>{" "}
+                          lei
+                        </h3>
+                      </div>
+                    </li>
+                    <hr className="bg-gray-400 h-1 w-full my-[1rem]" />
+                  </React.Fragment>
+                );
+              })}
             <li className="underline">
               <div className="flex justify-between items-center gap-10">
                 <h3>Pret total: </h3>
                 <span>
                   <span>
-                  {Number.isNaN(totalGeneral) ? 'dai refresh' : `${totalGeneral.toFixed(2)}`}
-                    </span> {!Number.isNaN(totalGeneral) && 'lei'}
+                    {Number.isNaN(totalGeneral)
+                      ? "dai refresh"
+                      : `${totalGeneral.toFixed(2)}`}
+                  </span>{" "}
+                  {!Number.isNaN(totalGeneral) && "lei"}
                 </span>
               </div>
             </li>

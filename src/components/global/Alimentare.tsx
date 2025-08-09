@@ -85,9 +85,7 @@ const Alimentare = ({
               >
                 <div className="">
                   Stoc:{" "}
-                  {remaining === null || Number.isNaN(remaining)
-                    ? "se incarca"
-                    : `${remaining} ramase`}
+                  {remaining === null ? "se incarca" : `${remaining} ramase`}
                 </div>
                 <div className="">Cost: {pret} lei</div>
               </div>
