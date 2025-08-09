@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Header from "@/components/global/Header";
