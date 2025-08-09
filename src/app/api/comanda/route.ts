@@ -97,7 +97,7 @@ export async function POST(req: Request) {
         if ((prod as any)[key] < item.cantitate) {
           return {
             valid: false,
-            // productId: item.productId,
+            productId: item.productId,
             productName: prod.nume,
             available: (prod as any)[key],
             requested: item.cantitate,
