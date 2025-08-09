@@ -1,6 +1,16 @@
 // src/types.ts
 
+import { StaticImageData } from "next/image";
+
 export type MarimeType = 'S' | 'M' | 'L'
+
+export type TricouType = {
+  images: (string | StaticImageData)[];
+  nume: string;
+  pret: number;
+  idProdus: string;
+  stockMap: { S: number; M: number; L: number };
+};
 
 export type StockMap = {
   S: number;

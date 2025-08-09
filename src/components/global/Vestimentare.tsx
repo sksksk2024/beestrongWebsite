@@ -2,20 +2,12 @@ import React, { useEffect, useState } from "react";
 import Minus from "../utils/Minus";
 import Plus from "../utils/Plus";
 import { Card, CardContent } from "../ui/card";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { CarouselItem } from "../ui/carousel";
 import { useProductListStore } from "../hooks/productListStore";
 import { getImageUrl } from "../utils/imageHelpers";
-import { MarimeType } from "../utils/types";
+import { MarimeType, TricouType } from "../utils/types";
 import { motion } from "framer-motion";
-
-type TricouType = {
-  images: (string | StaticImageData)[];
-  nume: string;
-  pret: number;
-  idProdus: string;
-  stockMap: { S: number; M: number; L: number };
-};
 
 const Tricou = ({ images, nume, pret, idProdus, stockMap }: TricouType) => {
   const [marime, setMarime] = useState<MarimeType>("S");
@@ -108,7 +100,7 @@ const Tricou = ({ images, nume, pret, idProdus, stockMap }: TricouType) => {
                                 `}
                       >
                         {s} ({" "}
-                        {remaining === null
+                        {remaining === null || Number.isNaN(remaining)
                           ? "se incarca"
                           : `${remaining} ramase`}{" "}
                         )
