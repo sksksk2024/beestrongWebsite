@@ -24,7 +24,7 @@ const Header = ({ toggleMenu, className, title, audio, cart }: HeaderProps) => {
 
   return (
     <header
-      className={`${className} top-0 z-50 flex justify-between items-center py-0 w-full bg-black/60`}
+      className={`${className} px-2P 2xs:px-16P sm:px-32P top-0 z-50 flex justify-between items-center py-0 w-full bg-black/60`}
     >
       <div className="blur w-full absolute inset-0"></div>
       <motion.button
