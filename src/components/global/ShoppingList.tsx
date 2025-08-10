@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
 
 import { useState } from "react";
@@ -68,8 +69,6 @@ const ShoppingList = () => {
                           alt={produs.nume}
                           onError={(e) => {
                             e.target as HTMLImageElement;
-                            // .src =
-                            //   "/pantaloni.webp"; // Fallback
                           }}
                         />
                         <h3>
