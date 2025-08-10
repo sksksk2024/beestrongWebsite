@@ -1,34 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+"use client";
 
-import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
-import Header from '@/components/global/Header';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { buttonVariants } from '@/components/motionVariants/motionVariants';
-import XMenu from '@/components/utils/XMenu';
-import Minus from '@/components/utils/Minus';
-import { SignOutButton } from '@clerk/nextjs';
-
-interface Order {
-  id: string;
-  numeClient: string;
-  email: string;
-  telefon: string;
-  adresa: string;
-  codPostal: string;
-  iteme: {
-    id: string;
-    nume: string;
-    pret: number;
-    cantitate: number;
-    imagine: string;
-  }[];
-  total: number;
-  status: 'Nelivrat' | 'Livrat';
-  createdAt: string;
-}
+import Image from "next/image";
+import React, { useState, useEffect } from "react";
+import Header from "@/components/global/Header";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { buttonVariants } from "@/components/motionVariants/motionVariants";
+import XMenu from "@/components/utils/XMenu";
+import Minus from "@/components/utils/Minus";
+import { SignOutButton } from "@clerk/nextjs";
+import { Order } from "@/components/utils/types";
 
 const AdminPanel = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -36,16 +18,16 @@ const AdminPanel = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [down, setDown] = useState<boolean>(false);
-  const [closeList,] = useState<boolean>(false);
+  const [closeList] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch('api/comanda');
+        const res = await fetch("api/comanda");
         const data = await res.json();
         setOrders(data);
       } catch (error) {
-        console.error('Failed to fetch orders:', error);
+        console.error("Failed to fetch orders:", error);
       }
     };
     fetchOrders();
@@ -53,9 +35,9 @@ const AdminPanel = () => {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const res = await fetch('/api/comanda', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/comanda", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: orderId,
           status: newStatus,
@@ -63,7 +45,7 @@ const AdminPanel = () => {
       });
 
       if (!res.ok) {
-        throw new Error('Failed to update status');
+        throw new Error("Failed to update status");
       }
 
       const updatedOrder = await res.json();
@@ -77,7 +59,7 @@ const AdminPanel = () => {
         setSelectedOrder(updatedOrder);
       }
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error("Error updating status:", error);
     }
   };
 
@@ -86,8 +68,8 @@ const AdminPanel = () => {
     setDown(false);
   };
 
-  const removeClass = closeList ? 'hidden' : 'block';
-  const listClass = down ? 'h-64H' : 'h-256H overflow-y-auto';
+  const removeClass = closeList ? "hidden" : "block";
+  const listClass = down ? "h-64H" : "h-256H overflow-y-auto";
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -98,7 +80,7 @@ const AdminPanel = () => {
       {/* Overlay that darkens the content when menu is open */}
       <div
         className={`z-20 fixed inset-0 bg-black z-40 transition-opacity duration-300 ${
-          isMenuOpen ? 'opacity-75' : 'opacity-0 pointer-events-none'
+          isMenuOpen ? "opacity-75" : "opacity-0 pointer-events-none"
         }`}
         onClick={toggleMenu}
       />
@@ -114,7 +96,7 @@ const AdminPanel = () => {
       {/* Sliding Menu */}
       <div
         className={`max-w-container-300 text-yellowCustom bg-black fixed top-0 left-0 h-full xs:w-1/4 z-50 transform transition-transform duration-300 ${
-          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="p-4">
@@ -194,15 +176,15 @@ const AdminPanel = () => {
                   </motion.div>
                 </td>
                 <td
-                id={`${order.status === 'Livrat' ? 'success' : 'important'}`}
+                  id={`${order.status === "Livrat" ? "success" : "important"}`}
                   // order.id
                   onClick={() =>
                     updateOrderStatus(
                       order.id,
-                      order.status === 'Nelivrat' ? 'Livrat' : 'Nelivrat'
+                      order.status === "Nelivrat" ? "Livrat" : "Nelivrat"
                     )
                   }
-                  className={`relative left-2 py-2 cursor-pointer duration-300 hover:font-bold ${order.status === 'Nelivrat' ? 'text-red-500' : 'text-green-500'}`}
+                  className={`relative left-2 py-2 cursor-pointer duration-300 hover:font-bold ${order.status === "Nelivrat" ? "text-red-500" : "text-green-500"}`}
                 >
                   {order.status}
                 </td>
@@ -216,7 +198,7 @@ const AdminPanel = () => {
       {selectedOrder && (
         <div className="flex flex-col justify-center items-center w-full">
           <section
-            className={`fixed bottom-0 transform-x-1/2 text-xl text-yellowCustom z-30 text-center ${listClass} ${removeClass}`}
+            className={`fixed -bottom-16I transform-x-1/2 text-xl text-yellowCustom z-30 text-center ${listClass} ${removeClass}`}
           >
             <div className="bg-gray-800 p-32P pt-32P w-full mx-auto rounded-t-16BR">
               <h3 className="underline mb-32M text-2xl">
@@ -228,20 +210,23 @@ const AdminPanel = () => {
                   return (
                     <React.Fragment key={index}>
                       <li className="underline">
-                        <div className="flex justify-around items-center gap-10">
+                        <div className="flex justify-start items-center gap-10">
                           <Image
                             className="w-10 h-10 bg-black z-50 rounded-full"
                             src={item.imagine}
-                            width={100}
-                            height={100}
-                            alt="img"
+                            width={300}
+                            height={300}
+                            alt="produs"
                           />
-                          <h3>{item.nume}{item.marime ? ` (${item.marime})` : ''}</h3>
+                          <h3>
+                            {item.nume}
+                            {item.marime ? ` (${item.marime})` : ""}
+                          </h3>
                           <p>
-                            Pret{' '}
+                            Pret{" "}
                             <span>
                               {item.cantitate} * {item.pret} = {pretTotal}
-                            </span>{' '}
+                            </span>{" "}
                             lei
                           </p>
                         </div>

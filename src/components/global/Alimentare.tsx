@@ -2,21 +2,11 @@ import React, { useState } from "react";
 import Minus from "../utils/Minus";
 import Plus from "../utils/Plus";
 import { Card, CardContent } from "../ui/card";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { CarouselItem } from "../ui/carousel";
 import { useProductListStore } from "../hooks/productListStore";
 import { getImageUrl } from "../utils/imageHelpers";
-import { MarimeType } from "../utils/types";
-
-type AlimentareType = {
-  images: (string | StaticImageData)[];
-  nume: string;
-  disponibil?: number;
-  idProdus: string;
-  pret: number;
-  marime?: MarimeType;
-  availableStock: number;
-};
+import { AlimentareType } from "../utils/types";
 
 const Alimentare = ({
   images,
@@ -102,6 +92,7 @@ const Alimentare = ({
               src={images[0]}
               width={300}
               height={300}
+              loading="lazy"
               alt={nume}
             />
           </CardContent>

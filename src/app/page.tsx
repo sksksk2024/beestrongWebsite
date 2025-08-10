@@ -7,14 +7,14 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { buttonVariants } from "@/components/motionVariants/motionVariants";
-import ProductCarousel from "@/components/global/ProductCarousel";
+// import ProductCarousel from "@/components/global/ProductCarousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import PageWrapper from "@/components/contexts/PageWrapper";
 import Footer from "@/components/global/Footer";
 import Benefits from "@/components/global/Benefits";
-import Food1 from "@/../public/alimentara1.png";
-import Tricou1 from "@/../public/banner.jpg";
-import ShoppingList from "@/components/global/ShoppingList";
+import Food1 from "@/../public/alimentare/alimentara1.webp";
+import Tricou1 from "@/../public/banner.webp";
+// import ShoppingList from "@/components/global/ShoppingList";
 import Link from "next/link";
 import XMenu from "@/components/utils/XMenu";
 import { SignOutButton, useUser } from "@clerk/nextjs";
@@ -24,6 +24,17 @@ import {
   produseAlimentare,
   produseVestimentare,
 } from "@/components/utils/StaticImages";
+import dynamic from "next/dynamic";
+
+const ProductCarousel = dynamic(
+  () => import("@/components/global/ProductCarousel"),
+  { ssr: false, loading: () => <Skeleton className="h-[20rem]" /> }
+);
+
+const ShoppingList = dynamic(() => import("@/components/global/ShoppingList"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[10rem]" />,
+});
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -295,21 +306,23 @@ export default function Home() {
             {/* WIP: LOOP */}
             <div className="relative z-0 top-0 left-0 w-full h-[100dvh] object-cover aspect-video object-cover aspect-video">
               <video
-                preload="metadata"
+                // preload="metadata"
                 ref={videoRef}
                 autoPlay
                 muted
                 width="100%"
                 loop
                 playsInline
+                preload="none"
                 className="absolute top-0 left-0 w-full h-full object-cover"
               >
                 <source
                   className="relative z-0"
-                  src="/videos/beeVideo2.mp4"
-                  type="video/mp4"
+                  src="/videos/beeVideo2.webm"
+                  type="video/webm"
                 />
                 Browser-ul tău nu suportă tag-ul video.
+                <track srcLang="ro" label="Română" />
               </video>
             </div>
             <h2 className="relative bottom-52I sm:bottom-64I lg:bottom-75I z-40 text-yellowCustom font-bold bg-black p-16P text-center text-sm sm:text-xl lg:text-2xl">
@@ -346,7 +359,8 @@ export default function Home() {
               <Image
                 className="absolute -top-128I 2xs:-top-0 object-cover 2xs:aspect-2/2 rounded-16BR transition-transform duration-300 scale-108 group-hover:scale-110"
                 src={Food1}
-                alt="img"
+                loading="lazy"
+                alt="Articol alimentar, cu costul si stocul sau"
               />
               <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem] text-md sm:text-xl">
                 Art Alimentare
@@ -361,9 +375,10 @@ export default function Home() {
             >
               <Image
                 className="absolute -top-48I object-cover aspect-1/2 rounded-16BR transition-transform duration-300 group-hover:scale-102"
+                loading="lazy"
                 src={Tricou1}
                 // src={hoveredClothes ? Tricou2 : Tricou1}
-                alt="img"
+                alt="Articol vestimentar, cu costul, marimile si stocurile lui"
               />
               <h3 className="absolute left-[1rem] bottom-[2rem] bg-black text-yellowCustom px-[0.5rem] text-md sm:text-xl">
                 Art Vestimentare

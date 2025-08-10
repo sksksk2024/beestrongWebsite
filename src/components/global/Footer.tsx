@@ -1,22 +1,27 @@
-import Image from 'next/image';
-import React from 'react';
-import Insta from '../utils/Insta';
-import Tiktok from '../utils/Tiktok';
-import YouTube from '../utils/Youtube';
-import Facebook from '../utils/Facebook';
-import Phone from '../utils/Phone';
-import Email from '../utils/Email';
-import anaf from '@/../public/anaf.png';
-import anpc from '@/../public/anpc.webp';
-import beestrongIcon from '@/../public/beestrong.svg';
-import Link from 'next/link';
+import Image from "next/image";
+import React from "react";
+import Insta from "../utils/Insta";
+import Tiktok from "../utils/Tiktok";
+import YouTube from "../utils/Youtube";
+import Facebook from "../utils/Facebook";
+import Phone from "../utils/Phone";
+import Email from "../utils/Email";
+import anaf from "@/../public/anaf.webp";
+import anpc from "@/../public/anpc.webp";
+import beestrongIcon from "@/../public/beestrong.svg";
+import Link from "next/link";
 
 const Footer = () => {
   return (
     <footer className="flex flex-col justify-center items-center md:items-start gap-5 md:pl-32P z-10">
       <div className="flex items-center">
         <div className="flex justify-center items-center">
-          <Image src={beestrongIcon} className="w-1/2" alt="beestrong icon" />
+          <Image
+            loading="lazy"
+            src={beestrongIcon}
+            className="w-1/2"
+            alt="beestrong"
+          />
           <span className="font-bold sm:text-xl lg:text-3xl">STRONG</span>
         </div>
       </div>
@@ -53,17 +58,16 @@ const Footer = () => {
       </Link>
 
       <div className="w-full flex flex-col md:flex-row md:justify-start items-center gap-5 md:gap-10">
-        <Link href='https://anpc.ro/' target="_blank">
-        <Image className="w-128W" src={anpc} alt="ANPC" />
+        <Link href="https://anpc.ro/" target="_blank">
+          <Image loading="lazy" className="w-128W" src={anpc} alt="ANPC" />
         </Link>
-        <Link href='https://www.anaf.ro' target="_blank">
-        <Image className="w-128W" src={anaf} alt="ANAF" />
+        <Link href="https://www.anaf.ro" target="_blank">
+          <Image loading="lazy" className="w-128W" src={anaf} alt="ANAF" />
         </Link>
       </div>
 
-      <p className='text-sm mb-32M max-w-container-400 text-center md:text-start'>
-        &copy; {new Date().getFullYear()} Beestrong |{' '}
-        Toate drepturile rezervate
+      <p className="text-sm mb-32M max-w-container-400 text-center md:text-start">
+        &copy; {new Date().getFullYear()} Beestrong | Toate drepturile rezervate
       </p>
     </footer>
   );

@@ -1,52 +1,3 @@
-import Food1 from "@/../public/alimentara1.png";
-import Food2 from "@/../public/alimentara2.png";
-import Food3 from "@/../public/alimentara3.png";
-import zebra1 from "@/../public/tricouri/zebraJersey (1).jpg";
-import zebra2 from "@/../public/tricouri/zebraJersey (2).jpg";
-import zebra3 from "@/../public/tricouri/zebraJersey (3).jpg";
-import zebra4 from "@/../public/tricouri/zebraJersey (4).jpg";
-import zebra5 from "@/../public/tricouri/zebraJersey (5).jpg";
-import galaxy1 from "@/../public/tricouri/galaxyJersey (1).jpg";
-import galaxy2 from "@/../public/tricouri/galaxyJersey (2).jpg";
-import galaxy3 from "@/../public/tricouri/galaxyJersey (3).jpg";
-import galaxy4 from "@/../public/tricouri/galaxyJersey (4).jpg";
-import galaxy5 from "@/../public/tricouri/galaxyJersey (5).jpg";
-import shNegri1 from "@/../public/tricouri/shNegri (1).jpg";
-import shNegri2 from "@/../public/tricouri/shNegri (2).jpg";
-import shNegri3 from "@/../public/tricouri/shNegri (3).jpg";
-import shNegri4 from "@/../public/tricouri/shNegri (4).jpg";
-import shAlbi1 from "@/../public/tricouri/shAlbi (1).jpg";
-import shAlbi2 from "@/../public/tricouri/shAlbi (2).jpg";
-import shAlbi3 from "@/../public/tricouri/shAlbi (3).jpg";
-import shAlbi4 from "@/../public/tricouri/shAlbi (4).jpg";
-import shAlbi5 from "@/../public/tricouri/shAlbi (5).jpg";
-import maieuNegru1 from "@/../public/tricouri/maieuNegru (1).jpg";
-import maieuNegru2 from "@/../public/tricouri/maieuNegru (2).jpg";
-import maieuNegru3 from "@/../public/tricouri/maieuNegru (3).jpg";
-import maieuAlb1 from "@/../public/tricouri/maieuAlb (1).jpg";
-import maieuAlb2 from "@/../public/tricouri/maieuAlb (2).jpg";
-import maieuAlb3 from "@/../public/tricouri/maieuAlb (3).jpg";
-import maieuAlb4 from "@/../public/tricouri/maieuAlb (4).jpg";
-import comAlb1 from "@/../public/tricouri/comAlb (1).jpg";
-import comAlb2 from "@/../public/tricouri/comAlb (2).jpg";
-import comAlb3 from "@/../public/tricouri/comAlb (3).jpg";
-import comAlb4 from "@/../public/tricouri/comAlb (4).jpg";
-import comAlb5 from "@/../public/tricouri/comAlb (5).jpg";
-import comNegru1 from "@/../public/tricouri/comNegru (1).jpg";
-import comNegru2 from "@/../public/tricouri/comNegru (2).jpg";
-import comNegru3 from "@/../public/tricouri/comNegru (3).jpg";
-import comNegru4 from "@/../public/tricouri/comNegru (4).jpg";
-import comNegru5 from "@/../public/tricouri/comNegru (5).jpg";
-import comNegru6 from "@/../public/tricouri/comNegru (6).jpg";
-import honey1 from "@/../public/tricouri/honeyJersey (1).jpg";
-import honey2 from "@/../public/tricouri/honeyJersey (2).jpg";
-import honey3 from "@/../public/tricouri/honeyJersey (3).jpg";
-import honey4 from "@/../public/tricouri/honeyJersey (4).jpg";
-import honey5 from "@/../public/tricouri/honeyJersey (5).jpg";
-import hoodie1 from "@/../public/tricouri/hoodie (1).jpg";
-import hoodie2 from "@/../public/tricouri/hoodie (2).jpg";
-import hoodie3 from "@/../public/tricouri/hoodie (3).jpg";
-
 // Define products with their DB IDs
 export const produseVestimentare = [
       {
@@ -134,8 +85,6 @@ export const produseVestimentare = [
 export const produseAlimentare = [
       {
         id: "cmdycjcqt000a9g803mi0z40j",
-        src1: Food1,
-        src2: Food1,
         nume: "Loaded Honey cu Creatina",
         pret: 37.99,
         stocS: 99,
@@ -160,16 +109,42 @@ export const produseAlimentare = [
       },
     ];
 
-export const vestimentareImages = [
-      [zebra1, zebra2, zebra3, zebra4, zebra5], // for Zebra Jersey
-      [galaxy1, galaxy2, galaxy3, galaxy4, galaxy5], // for Galaxy Jersey
-      [shNegri1, shNegri2, shNegri3, shNegri4], // for Shorts Negri
-      [shAlbi1, shAlbi2, shAlbi3, shAlbi4, shAlbi5], // for Shorts Albastri
-      [maieuNegru1, maieuNegru2, maieuNegru3], // for Maieu Negru
-      [maieuAlb1, maieuAlb2, maieuAlb3, maieuAlb4], // for Maieu Alb
-      [comNegru1, comNegru2, comNegru3, comNegru4, comNegru5, comNegru6],
-      [hoodie1, hoodie2, hoodie3],
-      [comAlb1, comAlb2, comAlb3, comAlb4, comAlb5],
-      [honey1, honey2, honey3, honey4, honey5],
-    ];
-export const alimentareImages = [[Food1], [Food3], [Food2]];
+export const vestimentareImages: string[][] = [
+  // zebraJersey
+  ["/tricouri/zebraJersey (1).webp", "/tricouri/zebraJersey (2).webp", "/tricouri/zebraJersey (3).webp", "/tricouri/zebraJersey (4).webp", "/tricouri/zebraJersey (5).webp"],
+
+  // galaxyJersey
+  ["/tricouri/galaxyJersey (1).webp", "/tricouri/galaxyJersey (2).webp", "/tricouri/galaxyJersey (3).webp", "/tricouri/galaxyJersey (4).webp", "/tricouri/galaxyJersey (5).webp"],
+
+  // shNegri
+  ["/tricouri/shNegri (1).webp", "/tricouri/shNegri (2).webp", "/tricouri/shNegri (3).webp", "/tricouri/shNegri (4).webp"],
+
+  // shAlbi
+  ["/tricouri/shAlbi (1).webp", "/tricouri/shAlbi (2).webp", "/tricouri/shAlbi (3).webp", "/tricouri/shAlbi (4).webp", "/tricouri/shAlbi (5).webp"],
+
+  // maieuNegru
+  ["/tricouri/maieuNegru (1).webp", "/tricouri/maieuNegru (2).webp", "/tricouri/maieuNegru (3).webp"],
+
+  // maieuAlb
+  ["/tricouri/maieuAlb (1).webp", "/tricouri/maieuAlb (2).webp", "/tricouri/maieuAlb (3).webp", "/tricouri/maieuAlb (4).webp"],
+
+  // comNegru
+  ["/tricouri/comNegru (1).webp", "/tricouri/comNegru (2).webp", "/tricouri/comNegru (3).webp", "/tricouri/comNegru (4).webp", "/tricouri/comNegru (5).webp", "/tricouri/comNegru (6).webp"],
+
+  // hoodie
+  ["/tricouri/hoodie (1).webp", "/tricouri/hoodie (2).webp", "/tricouri/hoodie (3).webp"],
+
+  // comAlb
+  ["/tricouri/comAlb (1).webp", "/tricouri/comAlb (2).webp", "/tricouri/comAlb (3).webp", "/tricouri/comAlb (4).webp", "/tricouri/comAlb (5).webp"],
+
+  // honeyJersey
+  ["/tricouri/honeyJersey (1).webp", "/tricouri/honeyJersey (2).webp", "/tricouri/honeyJersey (3).webp", "/tricouri/honeyJersey (4).webp", "/tricouri/honeyJersey (5).webp"],
+
+];
+
+
+export const alimentareImages: string[][] = [
+  ["/alimentare/alimentara1.webp"],
+  ["/alimentare/alimentara2.webp"],
+  ["/alimentare/alimentara3.webp"]
+];

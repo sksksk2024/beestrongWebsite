@@ -1,11 +1,21 @@
 // src/types.ts
 
-import { StaticImageData } from "next/image";
-
 export type MarimeType = 'S' | 'M' | 'L'
 
+export type AlimentareType = {
+  // images: (string | StaticImageData)[];
+  images: string[];
+  nume: string;
+  disponibil?: number;
+  idProdus: string;
+  pret: number;
+  marime?: MarimeType;
+  availableStock: number;
+};
+
 export type TricouType = {
-  images: (string | StaticImageData)[];
+  // images: (string | StaticImageData)[];
+  images: string[];
   nume: string;
   pret: number;
   idProdus: string;
@@ -27,18 +37,29 @@ export type OrderItem = {
   marime?: 'S' | 'M' | 'L'
 };
 
-export type Order = {
+// export type Order = {
+//   id: string;
+//   nume: string;
+//   email: string;
+//   telefon: string;
+//   codPostal: string;
+//   iteme: OrderItem[];
+//   total: number;
+//   createdAt: string;
+// };
+
+export interface Order {
   id: string;
-  nume: string;
+  numeClient: string;
   email: string;
   telefon: string;
-  marimeTricou: string;
-  marimePantaloni: string;
+  adresa: string;
   codPostal: string;
-  iteme: OrderItem[];
+  iteme: OrderItem[]
   total: number;
+  status: "Nelivrat" | "Livrat";
   createdAt: string;
-};
+}
 
 export type InvalidProduct = {
   nume?: string;

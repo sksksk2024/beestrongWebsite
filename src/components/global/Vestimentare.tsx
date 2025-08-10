@@ -128,6 +128,9 @@ const Tricou = ({ images, nume, pret, idProdus, stockMap }: TricouType) => {
               <Image
                 src={images[current]}
                 alt={nume}
+                width={300}
+                height={300}
+                loading="lazy"
                 className={`relative bottom-24I object-cover aspect-2/2 rounded-16BR transition-transform duration-300 group-hover:scale-105`}
               />
             </motion.div>

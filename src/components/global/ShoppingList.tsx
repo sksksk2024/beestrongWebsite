@@ -56,7 +56,8 @@ const ShoppingList = () => {
                     <li className="underline">
                       <div className="flex justify-around items-center gap-10">
                         <Image
-                          className="w-10 h-10 bg-black z-50 rounded-full"
+                          loading="lazy"
+                          className="w-[4rem] h-[2.2rem] bg-black z-50 rounded-full"
                           src={
                             produs.imagine.startsWith("/")
                               ? produs.imagine
@@ -66,8 +67,9 @@ const ShoppingList = () => {
                           height={300}
                           alt={produs.nume}
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              "/pantaloni.jpg"; // Fallback
+                            e.target as HTMLImageElement;
+                            // .src =
+                            //   "/pantaloni.webp"; // Fallback
                           }}
                         />
                         <h3>

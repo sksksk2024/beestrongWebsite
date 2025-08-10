@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin
+Disallow: /comanda
+Sitemap: https://beestrong-website-sigma.vercel.app/sitemap.xml

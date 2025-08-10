@@ -8,8 +8,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import XMenu from "../utils/XMenu";
-import Vestimentare from "./Vestimentare";
-import Alimentare from "./Alimentare";
+// import Vestimentare from "./Vestimentare";
+// import Alimentare from "./Alimentare";
 import QuestionCard from "./QuestionCard";
 import { StockMap } from "../utils/types";
 import {
@@ -18,6 +18,8 @@ import {
   produseVestimentare,
   vestimentareImages,
 } from "../utils/StaticImages";
+import dynamic from "next/dynamic";
+import { Skeleton } from "../ui/skeleton";
 
 type carouselProps = {
   isAlimenteModal: boolean;
@@ -27,6 +29,16 @@ type carouselProps = {
   vestStocks: Record<string, StockMap>;
   alimStocks: Record<string, StockMap>;
 };
+
+const Vestimentare = dynamic(() => import("@/components/global/Vestimentare"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[10rem]" />,
+});
+
+const Alimentare = dynamic(() => import("@/components/global/Alimentare"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[10rem]" />,
+});
 
 const ProductCarousel = forwardRef<HTMLDivElement, carouselProps>(
   (
